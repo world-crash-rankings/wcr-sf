@@ -6,4 +6,5 @@ parameters:
     excludePaths:
         - var
         - vendor
+        - tests/bootstrap.php
 
