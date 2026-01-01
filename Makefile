@@ -48,6 +48,9 @@ db-drop: ## Supprime la base de données
 db-migrate: ## Exécute les migrations
 	php bin/console doctrine:migrations:migrate --no-interaction
 
+db-update: ## Met à jour le schéma de la base de données (doctrine:schema:update)
+	php bin/console doctrine:schema:update --force
+
 db-rollback: ## Annule la dernière migration
 	php bin/console doctrine:migrations:migrate prev --no-interaction
 
