@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+{% import 'zone/_zone_header.html.twig' as zone_header %}
+
+{% block title %}{{ zone.name }} - Info - World Crash Rankings{% endblock %}
+
+{% block body %}
+{{ zone_header.header(zone, 'info') }}
+
+{# World Records History #}
+<h1 class="text-center mb-4">World Records History</h1>
+<table class="table table-sm">
+    <tbody>
+        {% for wr in wrs %}
+        <tr>
+            {# Score #}
+            <td class="text-end" style="width: 150px;"><strong>{{ wr.score|number_format(0, '.', ',') }}</strong></td>
+
+            {# Car image #}
+            <td class="text-center" style="width: 60px;">
+                {% if wr.car %}
+                    <img src="{{ asset('img/cars/' ~ wr.car.name|car_image ~ '.png') }}" alt="{{ wr.car.name }}" title="{{ wr.car.name }}" width="40" height="20">
+                {% endif %}
+            </td>
+
+            {# Country flag #}
+            <td class="text-center" style="width: 50px;">
+                <img src="{{ asset('img/flags/32/' ~ wr.player.country.iso ~ '.png') }}" alt="{{ wr.player.country.name }}" title="{{ wr.player.country.name }}" width="32" height="24">
+            </td>
+
+            {# Player name #}
+            <td style="width: 150px;">
+                <span class="text-primary">{{ wr.player.name }}</span>
+            </td>
+
+            {# Platform icon #}
+            <td class="text-center" style="width: 50px;">
+                {% if wr.platform %}
+                    <img src="{{ asset('img/logos/' ~ wr.platform.value|lower ~ '.png') }}" alt="{{ wr.platform.value }}" title="{{ wr.platform.value }}" width="32" height="32">
+                {% endif %}
+            </td>
+
+            {# Frequency/Version image #}
+            <td class="text-center" style="width: 60px;">
+                {% if wr.freq and wr.version %}
+                    <img src="{{ asset('img/logos/' ~ wr.freq.value|lower ~ '_' ~ wr.version.value|lower ~ '.png') }}" alt="{{ wr.freq.value }} {{ wr.version.value }}" width="32" height="32">
+                {% elseif wr.freq %}
+                    <img src="{{ asset('img/logos/' ~ wr.freq.value|lower ~ '_.png') }}" alt="{{ wr.freq.value }}" width="32" height="32">
+                {% elseif wr.version %}
+                    <img src="{{ asset('img/logos/_' ~ wr.version.value|lower ~ '.png') }}" alt="{{ wr.version.value }}" width="32" height="32">
+                {% endif %}
+            </td>
+
+            {# Proof type icon #}
+            <td class="text-center" style="width: 50px;">
+                {% if wr.proofType %}
+                    {% if wr.proofLink %}
+                        <a href="{{ wr.proofLink }}" target="_blank">
+                            <img src="{{ asset('img/proofs/' ~ wr.proofType.value|lower ~ '.png') }}" alt="{{ wr.proofType.value }}" title="{{ wr.proofType.value }}" width="32" height="32">
+                        </a>
+                    {% else %}
+                        <img src="{{ asset('img/proofs/' ~ wr.proofType.value|lower ~ '.png') }}" alt="{{ wr.proofType.value }}" title="{{ wr.proofType.value }}" width="32" height="32">
+                    {% endif %}
+                {% endif %}
+            </td>
+
+            {# Date period #}
+            <td class="text-end text-muted">
+                {{ wr.registration|date('M. Y') }}
+                {% if wr.realisation %}
+                    - {{ wr.realisation|date('M. Y') }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{# Best Damage/Multi/Total Box #}
+<div class="row mt-5">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>Best Damage</th>
+                    <th></th>
+                    <th>Best Multi</th>
+                    <th></th>
+                    <th>Best Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ zone.bestDamage|number_format(0, '.', ',') }}</td>
+                    <td>x</td>
+                    <td>{{ zone.bestMulti|number_format(0, '.', ',') }}</td>
+                    <td>=</td>
+                    <td>{{ zone.bestTotal|number_format(0, '.', ',') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+{# Score Rating #}
+<div class="row mt-4">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <h2 class="text-center bg-light p-3 mb-0">Score Rating</h2>
+        <table class="table table-sm table-striped mb-0">
+            <tbody>
+                {% for star in zone.starThresholds|sort((a, b) => b.nbStars <=> a.nbStars) %}
+                <tr>
+                    <td class="text-end" style="width: 40%;">{{ '$' ~ star.score|number_format(0, '.', ',') }}</td>
+                    <td class="text-center" style="width: 60%;">
+                        {% for i in 1..10 %}
+                            {% if i <= star.nbStars %}
+                                <img src="{{ asset('img/stars/full.png') }}" alt="★" width="16" height="16">
+                            {% else %}
+                                <img src="{{ asset('img/stars/empty.png') }}" alt="☆" width="16" height="16">
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+{# Zone Description #}
+{% if zone.description %}
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Description</h2>
+            </div>
+            <div class="card-body">
+                {{ zone.description|raw }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

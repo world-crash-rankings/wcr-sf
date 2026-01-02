@@ -118,3 +118,4 @@ ALTER TABLE strats CHANGE best_damage best_damage BIGINT UNSIGNED NOT NULL, CHAN
 ALTER TABLE zones CHANGE name name VARCHAR(255) NOT NULL, CHANGE ps2 ps2 TINYINT DEFAULT NULL, CHANGE description description LONGTEXT NOT NULL, CHANGE best_damage best_damage BIGINT UNSIGNED NOT NULL, CHANGE best_multi best_multi BIGINT UNSIGNED NOT NULL, CHANGE best_total best_total BIGINT UNSIGNED NOT NULL, CHANGE glitch glitch VARCHAR(255) DEFAULT NULL, CHANGE dmg_wr_known dmg_wr_known TINYINT DEFAULT NULL;
 
 
+UPDATE countries SET iso = LOWER(iso);

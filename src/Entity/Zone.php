@@ -176,6 +176,11 @@ class Zone
         $this->glitch = $glitch;
     }
 
+    public function isGlitch(): bool
+    {
+        return $this->glitch !== null;
+    }
+
     public function getTop25Channel(): string
     {
         return $this->top25Channel;
