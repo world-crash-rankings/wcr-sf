@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Zone
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column]
     private int $id;
 
@@ -30,14 +31,23 @@ class Zone
     #[ORM\Column(type: Types::TEXT)]
     private string $description;
 
-    #[ORM\Column]
-    private int $bestDamage;
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $bestDamage;
 
-    #[ORM\Column]
-    private int $bestMulti;
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $bestMulti;
 
-    #[ORM\Column]
-    private int $bestTotal;
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $bestTotal;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $glitch = null;
@@ -47,12 +57,6 @@ class Zone
 
     #[ORM\Column(length: 255)]
     private string $bestVidsChannel;
-
-    /**
-     * @var array<string, mixed>
-     */
-    #[ORM\Column(type: Types::JSON)]
-    private array $stars = [];
 
     #[ORM\Column(length: 255)]
     private string $forum;
@@ -132,32 +136,32 @@ class Zone
         $this->description = $description;
     }
 
-    public function getBestDamage(): int
+    public function getBestDamage(): string
     {
         return $this->bestDamage;
     }
 
-    public function setBestDamage(int $bestDamage): void
+    public function setBestDamage(string $bestDamage): void
     {
         $this->bestDamage = $bestDamage;
     }
 
-    public function getBestMulti(): int
+    public function getBestMulti(): string
     {
         return $this->bestMulti;
     }
 
-    public function setBestMulti(int $bestMulti): void
+    public function setBestMulti(string $bestMulti): void
     {
         $this->bestMulti = $bestMulti;
     }
 
-    public function getBestTotal(): int
+    public function getBestTotal(): string
     {
         return $this->bestTotal;
     }
 
-    public function setBestTotal(int $bestTotal): void
+    public function setBestTotal(string $bestTotal): void
     {
         $this->bestTotal = $bestTotal;
     }
@@ -190,22 +194,6 @@ class Zone
     public function setBestVidsChannel(string $bestVidsChannel): void
     {
         $this->bestVidsChannel = $bestVidsChannel;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getStars(): array
-    {
-        return $this->stars;
-    }
-
-    /**
-     * @param array<string, mixed> $stars
-     */
-    public function setStars(array $stars): void
-    {
-        $this->stars = $stars;
     }
 
     public function getForum(): string

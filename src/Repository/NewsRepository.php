@@ -17,4 +17,13 @@ class NewsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, News::class);
     }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function findAllOrderedByDateQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('n')
+            ->orderBy('n.registration', 'DESC');
+    }
 }

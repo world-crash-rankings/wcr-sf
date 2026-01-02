@@ -40,14 +40,23 @@ class Score
     #[ORM\JoinColumn(nullable: true)]
     private ?Strat $strat = null;
 
-    #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true])]
-    private int $score;
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $score;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $damage = null;
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(type: Types::BIGINT, nullable: true, options: ['unsigned' => true])]
+    private ?string $damage = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $multi = null;
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(type: Types::BIGINT, nullable: true, options: ['unsigned' => true])]
+    private ?string $multi = null;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $formerWr = false;
@@ -151,32 +160,32 @@ class Score
         $this->strat = $strat;
     }
 
-    public function getScore(): int
+    public function getScore(): string
     {
         return $this->score;
     }
 
-    public function setScore(int $score): void
+    public function setScore(string $score): void
     {
         $this->score = $score;
     }
 
-    public function getDamage(): ?int
+    public function getDamage(): ?string
     {
         return $this->damage;
     }
 
-    public function setDamage(?int $damage): void
+    public function setDamage(?string $damage): void
     {
         $this->damage = $damage;
     }
 
-    public function getMulti(): ?int
+    public function getMulti(): ?string
     {
         return $this->multi;
     }
 
-    public function setMulti(?int $multi): void
+    public function setMulti(?string $multi): void
     {
         $this->multi = $multi;
     }

@@ -1,39 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - World Crash Rankings{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
-<div style="text-align: center; padding: 3rem 0;">
-    <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: #2c3e50;">
-        Bienvenue sur World Crash Rankings
-    </h1>
-
-    <p style="font-size: 1.2rem; color: #7f8c8d; margin-bottom: 2rem;">
-        Système de gestion des classements Crash Mode
-    </p>
-
-    {% if app.user %}
-        <div style="background: #ecf0f1; padding: 2rem; border-radius: 8px; max-width: 600px; margin: 0 auto;">
-            <h2 style="margin-bottom: 1rem;">Vous êtes connecté</h2>
-            <p><strong>Username:</strong> {{ app.user.username }}</p>
-            <p><strong>Email:</strong> {{ app.user.email }}</p>
-            <p><strong>Rôles:</strong> {{ app.user.roles|join(', ') }}</p>
+<div class="panel panel-default home-banner">
+    <img src="{{ asset('img/home.png') }}" alt="WCR">
+    <div class="home-banner-content">
+        <div class="text-center title-header">
+            <h1>Welcome to the World Crash Rankings!</h1>
+            <h4>(running since 2005)</h4>
         </div>
-    {% else %}
-        <div style="margin-top: 2rem;">
-            <a href="{{ path('app_login') }}"
-               style="display: inline-block; background: #3498db; color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 4px; font-weight: bold;">
-                Se connecter
-            </a>
-        </div>
-    {% endif %}
+        <div>
+            <p class="h4 text-center">This website is dedicated to highscores in Crash Mode in Burnout 2: Point of Impact. It lists the top 25 best known scores for each zone, best available videos and many other statistics.</p>
+            <p>Scores have been taken from the old www.superhighscore.com website, Xbox Live, www.cyberscore.net, burnout.videogamesrecords.net, www.youtube.com and other rankings, vids and records found on the World Wide Web.</p>
 
-    <div style="margin-top: 3rem; padding: 2rem; background: #f8f9fa; border-radius: 8px;">
-        <h3 style="margin-bottom: 1rem;">Migration en cours</h3>
-        <p>Ce projet est une migration de l'ancienne version Zend Framework 2 vers Symfony 8.0</p>
-        <p style="margin-top: 0.5rem; color: #7f8c8d; font-size: 0.9rem;">
-            Les fonctionnalités seront ajoutées progressivement
-        </p>
+            <div class="submit">
+                If you want to see your highscore(s) appear on the rankings, ... <a href="#" onclick="$('.submit').toggle(); return false;">Read more &#9660;</a>
+            </div>
+            <div class="submit" style="display:none">
+                <p>If you want to see your highscore(s) appear on the rankings please send a email to brainkiller007[at]gmx[dot]de and attach a video of your highscore where also the score, damage and multiplier is shown.<br>
+                Or upload the video somewhere else (for example youtube) and attach the link. You can send that link also to Brainkiller007 via pm on youtube or on the WCR forum. If you don't have a video of your highscore you can also send a top-5 video or take a pic of your record.<br>
+                In each case, if possible, please mention the score, damage and multiplier, the car used, the system used, and the (approximately) date the score was achieved. And of course your name you want to appear on the rankings and the country you are from.<br>
+                For example:</p>
+                <p>Test Crasher<br>
+                USA<br>
+                Zone 1/Down Hill Demolition<br>
+                9,876,543 x 21 = 207,407,403<br>
+                January 1, 2014<br>
+                Xbox 60hz (NTSC)<br>
+                Supercar</p>
+                <p>Note: Scores/Records done on Dolphin or Emulators are not accepted anymore cause it is way too easy to cheat, which happened in the past.</p>
+                <a href="#" onclick="$('.submit').toggle(); return false;">&#9650;</a>
+            </div>
+
+            <p class="h3 text-center small-top-margin">Happy crashing!</p>
+        </div>
     </div>
 </div>
+
+<h1 title="All movements and new entries in a top-25, new non-glitch PRs and new sink-glitch PRs will be announced here. Beside that announcements and info about the WCR and this website will appear here.">WCR News</h1>
+
+{% if news is defined and news|length > 0 %}
+    {% for new in news %}
+        <section class="panel panel-default news">
+            <div class="panel-heading">
+                <h4>{{ new.registration|date('F j, Y - H:i:s') }}</h4>
+            </div>
+            <article class="panel-body">
+                {{ new.content|nl2br|raw }}
+            </article>
+        </section>
+    {% endfor %}
+
+    <div class="text-center">
+        {{ knp_pagination_render(news) }}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <p>No news available yet.</p>
+    </div>
+{% endif %}
 {% endblock %}
