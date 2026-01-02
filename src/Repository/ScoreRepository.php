@@ -46,4 +46,241 @@ class ScoreRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Get current world records for all zones
+     *
+     * @return array<int, Score>
+     */
+    public function getCurrentWorldRecords(): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->where('s.chartRank = 1')
+            ->orderBy('s.zone', 'ASC');
+
+        $scores = $qb->getQuery()->getResult();
+
+        // Index by zone ID for easy access
+        $wrs = [];
+        foreach ($scores as $score) {
+            $wrs[$score->getZone()->getId()] = $score;
+        }
+
+        return $wrs;
+    }
+
+    /**
+     * Get top scores for a zone
+     *
+     * @return list<Score>
+     */
+    public function getTopScores(Zone $zone, int $limit = 25): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->where('s.zone = :zone')
+            ->andWhere('s.chartRank IS NOT NULL')
+            ->setParameter('zone', $zone)
+            ->orderBy('s.chartRank', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get scores filtered by glitch type
+     *
+     * @return list<Score>
+     */
+    public function getUnSortedScores(Zone $zone, string $glitchType, int $limit = 10): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->where('s.zone = :zone')
+            ->setParameter('zone', $zone);
+
+        if ($glitchType === 'None') {
+            $qb->andWhere('s.glitch = :glitch')
+                ->setParameter('glitch', \App\Enum\GlitchType::NONE);
+        } elseif ($glitchType === 'Sink') {
+            $qb->andWhere('s.glitch = :glitch')
+                ->setParameter('glitch', \App\Enum\GlitchType::SINK);
+        }
+
+        $qb->orderBy('s.score', 'DESC')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Get freeze scores for a zone
+     *
+     * @return list<Score>
+     */
+    public function getFreezeScores(Zone $zone): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->where('s.zone = :zone')
+            ->andWhere('s.glitch = :glitch')
+            ->setParameter('zone', $zone)
+            ->setParameter('glitch', \App\Enum\GlitchType::FREEZE)
+            ->orderBy('s.score', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get former world records for a zone
+     *
+     * @return list<Score>
+     */
+    public function getFormerWorldRecords(Zone $zone): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->where('s.zone = :zone')
+            ->andWhere('s.formerWr = true')
+            ->setParameter('zone', $zone)
+            ->orderBy('s.registration', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get best scores with video proof
+     *
+     * @return list<Score>
+     */
+    public function getBestScoreVideos(Zone $zone, int $limit = 10): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->where('s.zone = :zone')
+            ->andWhere('s.proofType IN (:proofTypes)')
+            ->andWhere('s.proofLink IS NOT NULL')
+            ->setParameter('zone', $zone)
+            ->setParameter('proofTypes', [\App\Enum\ProofType::REPLAY, \App\Enum\ProofType::LIVE])
+            ->orderBy('s.score', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get best damage scores with video proof
+     *
+     * @return list<Score>
+     */
+    public function getBestDamageVideos(Zone $zone, int $limit = 10): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->where('s.zone = :zone')
+            ->andWhere('s.proofType IN (:proofTypes)')
+            ->andWhere('s.proofLink IS NOT NULL')
+            ->andWhere('s.damage IS NOT NULL')
+            ->setParameter('zone', $zone)
+            ->setParameter('proofTypes', [\App\Enum\ProofType::REPLAY, \App\Enum\ProofType::LIVE])
+            ->orderBy('s.damage', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get best videos by type (Live, Non Glitch)
+     *
+     * @return array<string, Score|null>
+     */
+    public function getBestVideosByType(Zone $zone): array
+    {
+        $typeVids = [
+            'Live' => null,
+            'Non Glitch' => null,
+        ];
+
+        // Best Live proof
+        $liveScore = $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->where('s.zone = :zone')
+            ->andWhere('s.proofType = :proofType')
+            ->andWhere('s.proofLink IS NOT NULL')
+            ->setParameter('zone', $zone)
+            ->setParameter('proofType', \App\Enum\ProofType::LIVE)
+            ->orderBy('s.score', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($liveScore !== null) {
+            $typeVids['Live'] = $liveScore;
+        }
+
+        // Best Non Glitch proof (if zone has glitch modes)
+        if ($zone->isGlitch()) {
+            $nonGlitchScore = $this->createQueryBuilder('s')
+                ->leftJoin('s.player', 'p')
+                ->addSelect('p')
+                ->leftJoin('p.country', 'country')
+                ->addSelect('country')
+                ->leftJoin('s.car', 'c')
+                ->addSelect('c')
+                ->where('s.zone = :zone')
+                ->andWhere('s.glitch = :glitch')
+                ->andWhere('s.proofLink IS NOT NULL')
+                ->setParameter('zone', $zone)
+                ->setParameter('glitch', \App\Enum\GlitchType::NONE)
+                ->orderBy('s.score', 'DESC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if ($nonGlitchScore !== null) {
+                $typeVids['Non Glitch'] = $nonGlitchScore;
+            }
+        }
+
+        return $typeVids;
+    }
 }

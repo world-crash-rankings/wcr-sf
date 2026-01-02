@@ -1,0 +1,38 @@
+{% macro header(zone, active_tab) %}
+{# Zone Navigation - buttons 1-30 #}
+<div class="mb-3">
+    <div class="btn-group w-100" role="group">
+        {% for i in 1..30 %}
+            {% set route = active_tab == 'scores' ? 'zone' : (active_tab == 'info' ? 'zone_info' : (active_tab == 'strats' ? 'zone_strats' : 'zone_videos')) %}
+            <a href="{{ path(route, {id: i}) }}" class="btn btn-{{ i == zone.id ? 'warning' : 'primary' }}">{{ i }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+{# Zone Header with 3 columns #}
+<div class="row align-items-center mb-4">
+    {# Left: Platform logos #}
+    <div class="col-auto">
+        <img src="{{ asset('img/logos/xbox.png') }}" alt="Xbox" width="48" height="48" class="me-2">
+        <img src="{{ asset('img/logos/gc.png') }}" alt="GameCube" width="48" height="48" class="me-2">
+        {% if zone.ps2 %}
+            <img src="{{ asset('img/logos/ps2.png') }}" alt="PS2" width="48" height="48">
+        {% endif %}
+    </div>
+
+    {# Center: Zone title #}
+    <div class="col text-center">
+        <h1 class="mb-0">Zone {{ zone.id }} - {{ zone.name }}</h1>
+    </div>
+
+    {# Right: Action tabs #}
+    <div class="col-auto">
+        <div class="btn-group" role="group">
+            <a href="{{ path('zone', {id: zone.id}) }}" class="btn btn-{{ active_tab == 'scores' ? 'warning' : 'primary' }}">Scores</a>
+            <a href="{{ path('zone_info', {id: zone.id}) }}" class="btn btn-{{ active_tab == 'info' ? 'warning' : 'primary' }}">Info</a>
+            <a href="{{ path('zone_strats', {id: zone.id}) }}" class="btn btn-{{ active_tab == 'strats' ? 'warning' : 'primary' }}">Strats</a>
+            <a href="{{ path('zone_videos', {id: zone.id}) }}" class="btn btn-{{ active_tab == 'videos' ? 'warning' : 'primary' }}">Vids</a>
+        </div>
+    </div>
+</div>
+{% endmacro %}
