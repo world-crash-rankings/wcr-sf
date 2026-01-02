@@ -7,4 +7,7 @@ parameters:
         - var
         - vendor
         - tests/bootstrap.php
+    ignoreErrors:
+        # Doctrine BIGINT maps to string in PHP for unsigned large integers
+        - '#Property .* type mapping mismatch: database can contain int(\|null)? but property expects string(\|null)?\.#'
 

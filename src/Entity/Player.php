@@ -32,8 +32,11 @@ class Player
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\Column(type: Types::BIGINT, nullable: true)]
-    private ?int $total = null;
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(type: Types::BIGINT, nullable: true, options: ['unsigned' => true])]
+    private ?string $total = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 3, nullable: true)]
     private ?string $avgPos = null;
@@ -124,12 +127,12 @@ class Player
         $this->notes = $notes;
     }
 
-    public function getTotal(): ?int
+    public function getTotal(): ?string
     {
         return $this->total;
     }
 
-    public function setTotal(?int $total): void
+    public function setTotal(?string $total): void
     {
         $this->total = $total;
     }

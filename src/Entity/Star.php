@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\StarRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StarRepository::class)]
@@ -21,11 +22,14 @@ class Star
     #[ORM\JoinColumn(nullable: false)]
     private Zone $zone;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['unsigned' => true])]
     private int $nbStars;
 
-    #[ORM\Column]
-    private int $score;
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $score;
 
     public function getId(): ?int
     {
@@ -54,12 +58,12 @@ class Star
         $this->nbStars = $nbStars;
     }
 
-    public function getScore(): int
+    public function getScore(): string
     {
         return $this->score;
     }
 
-    public function setScore(int $score): void
+    public function setScore(string $score): void
     {
         $this->score = $score;
     }

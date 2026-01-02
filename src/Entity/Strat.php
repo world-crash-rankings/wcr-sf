@@ -44,14 +44,26 @@ class Strat
     #[ORM\Column(nullable: true)]
     private ?bool $ps2 = null;
 
-    #[ORM\Column]
-    private int $bestDamage;
+    #[ORM\Column(nullable: true)]
+    private ?bool $runaway = null;
 
-    #[ORM\Column]
-    private int $bestMulti;
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $bestDamage;
 
-    #[ORM\Column]
-    private int $bestTotal;
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $bestMulti;
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::BIGINT, options: ['unsigned' => true])]
+    private string $bestTotal;
 
     /**
      * @var Collection<int, Car>
@@ -159,32 +171,42 @@ class Strat
         $this->ps2 = $ps2;
     }
 
-    public function getBestDamage(): int
+    public function isRunaway(): ?bool
+    {
+        return $this->runaway;
+    }
+
+    public function setRunaway(?bool $runaway): void
+    {
+        $this->runaway = $runaway;
+    }
+
+    public function getBestDamage(): string
     {
         return $this->bestDamage;
     }
 
-    public function setBestDamage(int $bestDamage): void
+    public function setBestDamage(string $bestDamage): void
     {
         $this->bestDamage = $bestDamage;
     }
 
-    public function getBestMulti(): int
+    public function getBestMulti(): string
     {
         return $this->bestMulti;
     }
 
-    public function setBestMulti(int $bestMulti): void
+    public function setBestMulti(string $bestMulti): void
     {
         $this->bestMulti = $bestMulti;
     }
 
-    public function getBestTotal(): int
+    public function getBestTotal(): string
     {
         return $this->bestTotal;
     }
 
-    public function setBestTotal(int $bestTotal): void
+    public function setBestTotal(string $bestTotal): void
     {
         $this->bestTotal = $bestTotal;
     }
