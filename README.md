@@ -2,6 +2,13 @@
 
 Version Symfony 8.0 du projet World Crash Rankings.
 
+Develop
+-------
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/badges/quality-score.png?b=dev)](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/?branch=develop)
+[![Build Status](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/badges/build.png?b=dev)]()
+
+
 ## Contexte
 
 Ce projet est une migration de l'ancienne version développée en **Zend Framework 2**, située dans `../wcr-zf2`.
