@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<div class="panel panel-default home-banner">
+<div class="home-banner mb-4">
     <img src="{{ asset('img/home.png') }}" alt="WCR">
     <div class="home-banner-content">
         <div class="text-center title-header">
@@ -38,26 +38,26 @@
     </div>
 </div>
 
-<h1 title="All movements and new entries in a top-25, new non-glitch PRs and new sink-glitch PRs will be announced here. Beside that announcements and info about the WCR and this website will appear here.">WCR News</h1>
+<h1 class="mb-4" title="All movements and new entries in a top-25, new non-glitch PRs and new sink-glitch PRs will be announced here. Beside that announcements and info about the WCR and this website will appear here.">WCR News</h1>
 
 {% if news is defined and news|length > 0 %}
     {% for new in news %}
-        <section class="panel panel-default news">
-            <div class="panel-heading">
-                <h4>{{ new.registration|date('F j, Y - H:i:s') }}</h4>
+        <section class="card news mb-3">
+            <div class="card-header bg-light">
+                <h4 class="mb-0">{{ new.registration|date('F j, Y - H:i:s') }}</h4>
             </div>
-            <article class="panel-body">
-                {{ new.content|nl2br|raw }}
+            <article class="card-body rich-content">
+                {{ new.content|raw }}
             </article>
         </section>
     {% endfor %}
 
-    <div class="text-center">
+    <div class="d-flex justify-content-center mt-4">
         {{ knp_pagination_render(news) }}
     </div>
 {% else %}
     <div class="alert alert-info">
-        <p>No news available yet.</p>
+        <p class="mb-0">No news available yet.</p>
     </div>
 {% endif %}
 {% endblock %}
