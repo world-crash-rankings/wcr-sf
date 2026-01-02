@@ -1,9 +1,13 @@
 body {
-    padding-top: 60px;
+    padding-top: 0;
     padding-bottom: 40px;
     font-size: 14px;
     line-height: 1.42857143;
     background-color: #ffffff;
+}
+
+.navbar {
+    margin-bottom: 20px;
 }
 
 h1 {
