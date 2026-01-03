@@ -113,6 +113,26 @@ class PlayerRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get all players as choice array for forms (name => nameUrl)
+     *
+     * @return array<string, string>
+     */
+    public function getPlayerChoices(): array
+    {
+        $players = $this->createQueryBuilder('p')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $choices = [];
+        foreach ($players as $player) {
+            $choices[$player->getName()] = $player->getNameUrl();
+        }
+
+        return $choices;
+    }
+
+    /**
      * Get distinct platforms used by a player
      *
      * @return string[]
