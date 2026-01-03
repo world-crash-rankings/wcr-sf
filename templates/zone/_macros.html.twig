@@ -10,7 +10,7 @@
     </td>
 
     {# Score #}
-    <td class="text-end"><strong>{{ score.score|number_format(0, '.', ',') }}</strong></td>
+    <td class="text-end"><strong>${{ score.score|number_format(0, '.', ',') }}</strong></td>
 
     {# Car image #}
     <td class="text-center">
@@ -34,7 +34,8 @@
     {# Platform icon #}
     <td class="text-center">
         {% if score.platform %}
-            <img src="{{ asset('img/logos/' ~ score.platform.value|lower ~ '.png') }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
+            {% set platformImg = score.platform.value|lower ~ (score.emulator ? '_emulator' : '') ~ '.png' %}
+            <img src="{{ asset('img/logos/' ~ platformImg) }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
         {% endif %}
     </td>
 
@@ -123,7 +124,110 @@
     {# Platform icon #}
     <td class="text-center">
         {% if score.platform %}
-            <img src="{{ asset('img/logos/' ~ score.platform.value|lower ~ '.png') }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
+            {% set platformImg = score.platform.value|lower ~ (score.emulator ? '_emulator' : '') ~ '.png' %}
+            <img src="{{ asset('img/logos/' ~ platformImg) }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
+        {% endif %}
+    </td>
+
+    {# Frequency/Version image #}
+    <td class="text-center">
+        {% if score.freq and score.version %}
+            {# Both freq and version: 60hz_ntsc.png #}
+            <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
+        {% elseif score.freq %}
+            {# Only freq: 60hz_.png #}
+            <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_.png') }}" alt="{{ score.freq.value }}" width="32" height="32">
+        {% elseif score.version %}
+            {# Only version: _ntsc.png #}
+            <img src="{{ asset('img/logos/_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.version.value }}" width="32" height="32">
+        {% endif %}
+    </td>
+
+    {# Stars rating #}
+    <td class="text-center">
+        {% if score.stars %}
+            {% for i in 1..10 %}
+                {% if i <= score.stars %}
+                    <img src="{{ asset('img/stars/full.png') }}" alt="★" width="16" height="16">
+                {% else %}
+                    <img src="{{ asset('img/stars/empty.png') }}" alt="☆" width="16" height="16">
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </td>
+
+    {# Percent WR badge #}
+    <td class="text-center">
+        {% if score.percentWr %}
+            <span class="badge bg-success">{{ score.percentWr }}%</span>
+        {% endif %}
+    </td>
+
+    {# Proof type icon #}
+    <td class="text-center">
+        {% if score.proofType %}
+            {% if score.proofLink %}
+                <a href="{{ score.proofLink }}" target="_blank">
+                    <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="24" height="24">
+                </a>
+            {% else %}
+                <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="24" height="24">
+            {% endif %}
+        {% endif %}
+    </td>
+
+    {# Date #}
+    <td class="text-end text-muted">
+        {{ score.realisation ? score.realisation|date('F j, Y') : (score.registration|date('F j, Y')) }}
+    </td>
+</tr>
+{% endmacro %}
+
+{% macro video_score_row(rank, score, show_rank_badge = true) %}
+<tr>
+    {# Zone name (link) #}
+    <td>
+        <a href="{{ path('zone', {'id': score.zone.id}) }}" class="text-decoration-none">
+            {{ score.zone.id }} - {{ score.zone.name }}
+        </a>
+    </td>
+
+    {# Rank with medal for top 3 #}
+    <td class="text-center">
+        {% if rank is not same as('-') and rank <= 3 and show_rank_badge %}
+            <img src="{{ asset('img/medals/' ~ rank ~ '.png') }}" alt="Rank {{ rank }}" width="32" height="32">
+        {% else %}
+            <span class="h5">{{ rank }}</span>
+        {% endif %}
+    </td>
+
+    {# Score #}
+    <td class="text-end"><strong>${{ score.score|number_format(0, '.', ',') }}</strong></td>
+
+    {# Car image #}
+    <td class="text-center">
+        {% if score.car %}
+            <img src="{{ asset('img/cars/' ~ score.car.name|car_image ~ '.png') }}" alt="{{ score.car.name }}" title="{{ score.car.name }}" width="40" height="20">
+        {% endif %}
+    </td>
+
+    {# Country flag #}
+    <td class="text-center">
+        <img src="{{ asset('img/flags/32/' ~ score.player.country.iso ~ '.png') }}" alt="{{ score.player.country.name }}" title="{{ score.player.country.name }}" width="32" height="24">
+    </td>
+
+    {# Player name (link) #}
+    <td>
+        <a href="{{ path('player_view', {'nameUrl': score.player.nameUrl}) }}" class="text-decoration-none">
+            {{ score.player.name }}
+        </a>
+    </td>
+
+    {# Platform icon #}
+    <td class="text-center">
+        {% if score.platform %}
+            {% set platformImg = score.platform.value|lower ~ (score.emulator ? '_emulator' : '') ~ '.png' %}
+            <img src="{{ asset('img/logos/' ~ platformImg) }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
         {% endif %}
     </td>
 
