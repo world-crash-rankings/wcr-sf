@@ -20,8 +20,9 @@
 
     {# Player name (link) #}
     <td>
-        {# TODO: Add link when PlayerController is created #}
-        <span class="text-primary">{{ player.name }}</span>
+        <a href="{{ path('player_view', {'nameUrl': player.nameUrl}) }}" class="text-decoration-none">
+            {{ player.name }}
+        </a>
     </td>
 
     {# Value #}

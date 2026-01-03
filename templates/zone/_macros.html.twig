@@ -26,8 +26,9 @@
 
     {# Player name (link) #}
     <td>
-        {# TODO: Add link when PlayerController is created #}
-        <span class="text-primary">{{ score.player.name }}</span>
+        <a href="{{ path('player_view', {'nameUrl': score.player.nameUrl}) }}" class="text-decoration-none">
+            {{ score.player.name }}
+        </a>
     </td>
 
     {# Platform icon #}

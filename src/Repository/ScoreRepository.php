@@ -283,4 +283,53 @@ class ScoreRepository extends ServiceEntityRepository
 
         return $typeVids;
     }
+
+    /**
+     * Get national records for a country (best score per zone)
+     *
+     * @return list<Score>
+     */
+    public function getNationalRecords(int $countryId): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT s.*
+            FROM scores s
+            JOIN players p ON s.player_id = p.id
+            WHERE s.id = (
+                SELECT lookup.id
+                FROM scores lookup
+                JOIN players players_tmp ON players_tmp.id = lookup.player_id
+                WHERE lookup.zone_id = s.zone_id
+                  AND players_tmp.country_id = :countryId
+                  AND lookup.chart_rank IS NOT NULL
+                ORDER BY lookup.score DESC
+                LIMIT 1
+            )
+            ORDER BY s.zone_id ASC
+        ';
+
+        $result = $conn->executeQuery($sql, ['countryId' => $countryId]);
+        $scoreIds = array_column($result->fetchAllAssociative(), 'id');
+
+        if (empty($scoreIds)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->where('s.id IN (:ids)')
+            ->setParameter('ids', $scoreIds)
+            ->orderBy('z.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -27,4 +27,20 @@ class CountryRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['iso' => strtolower($iso)]);
     }
+
+    public function findByNameUrl(string $nameUrl): ?Country
+    {
+        return $this->findOneBy(['nameUrl' => $nameUrl]);
+    }
+
+    /**
+     * @return Country[]
+     */
+    public function findAllOrderedByName(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+{% import 'zone/_macros.html.twig' as macros %}
+
+{% block title %}{{ player.name }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+{# Player Header #}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="d-flex align-items-center mb-3">
+            {# Country flag #}
+            <img src="{{ asset('img/flags/64/' ~ player.country.iso ~ '.png') }}"
+                 alt="{{ player.country.name }}"
+                 title="{{ player.country.name }}"
+                 height="64"
+                 class="me-3">
+
+            {# Player name and info #}
+            <div>
+                <h1 class="mb-1">{{ player.name }}</h1>
+                <div class="text-muted">
+                    {% if player.avgPosRank %}
+                        <span class="badge bg-primary me-2">WCR #{{ player.avgPosRank }}</span>
+                    {% endif %}
+                    {% for platform in platforms %}
+                        <img src="{{ asset('img/logos/' ~ platform|lower ~ '.png') }}"
+                             alt="{{ platform }}"
+                             title="{{ platform }}"
+                             width="24" height="24"
+                             class="me-1">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {# Player stats cards #}
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="card-subtitle mb-2 text-muted">Total Score</h6>
+                        <h4 class="card-title mb-0">
+                            {% if player.total %}
+                                ${{ player.total|number_format(0, '.', ',') }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="card-subtitle mb-2 text-muted">Average Position</h6>
+                        <h4 class="card-title mb-0">
+                            {% if player.avgPos %}
+                                {{ player.avgPos }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="card-subtitle mb-2 text-muted">Average Stars</h6>
+                        <h4 class="card-title mb-0">
+                            {% if player.avgStars %}
+                                {{ player.avgStars }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="card-subtitle mb-2 text-muted">% WR</h6>
+                        <h4 class="card-title mb-0">
+                            {% if player.avgPercent %}
+                                {{ player.avgPercent }}%
+                            {% else %}
+                                -
+                            {% endif %}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Personal Records Section #}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h2 class="mb-0">Personal Records</h2>
+            </div>
+            <div class="card-body p-0">
+                {% if personalRecords is empty %}
+                    <p class="text-center text-muted p-4">No personal records found.</p>
+                {% else %}
+                    <table class="table table-striped table-hover mb-0">
+                        <tbody>
+                            {% for score in personalRecords %}
+                                {{ macros.score_row(score.chartRank ?? '-', score, true) }}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

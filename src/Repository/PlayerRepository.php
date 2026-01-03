@@ -82,4 +82,39 @@ class PlayerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return Player[]
+     */
+    public function findByCountryOrderedByRank(int $countryId): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.country = :countryId')
+            ->andWhere('p.avgPosRank IS NOT NULL')
+            ->setParameter('countryId', $countryId)
+            ->orderBy('p.avgPosRank', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get distinct platforms used by a player
+     *
+     * @return string[]
+     */
+    public function getPlayerPlatforms(int $playerId): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT DISTINCT(platform) as platform
+            FROM scores
+            WHERE player_id = :playerId
+              AND platform IS NOT NULL
+            ORDER BY platform DESC
+        ';
+
+        $result = $conn->executeQuery($sql, ['playerId' => $playerId]);
+        return array_column($result->fetchAllAssociative(), 'platform');
+    }
 }
