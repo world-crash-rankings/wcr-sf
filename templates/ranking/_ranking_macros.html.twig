@@ -1,0 +1,41 @@
+{% macro ranking_row(player, rank_field, value_field, format_type = 'number') %}
+<tr>
+    {# Rank with medal for top 3 #}
+    <td class="text-center" style="width: 60px;">
+        {% set rank = attribute(player, rank_field) %}
+        {% if rank <= 3 %}
+            <img src="{{ asset('img/medals/' ~ rank ~ '.png') }}" alt="Rank {{ rank }}" width="32" height="32">
+        {% else %}
+            <span class="h5">{{ rank }}</span>
+        {% endif %}
+    </td>
+
+    {# Country flag #}
+    <td class="text-center" style="width: 60px;">
+        <img src="{{ asset('img/flags/32/' ~ player.country.iso ~ '.png') }}"
+             alt="{{ player.country.name }}"
+             title="{{ player.country.name }}"
+             width="32" height="24">
+    </td>
+
+    {# Player name (link) #}
+    <td>
+        {# TODO: Add link when PlayerController is created #}
+        <span class="text-primary">{{ player.name }}</span>
+    </td>
+
+    {# Value #}
+    <td class="text-end" style="width: 150px;">
+        {% set value = attribute(player, value_field) %}
+        {% if format_type == 'currency' %}
+            <strong>${{ value|number_format(0, '.', ',') }}</strong>
+        {% elseif format_type == 'decimal' %}
+            <strong>{{ value }}</strong>
+        {% elseif format_type == 'percent' %}
+            <strong>{{ value }}%</strong>
+        {% else %}
+            <strong>{{ value|number_format(0, '.', ',') }}</strong>
+        {% endif %}
+    </td>
+</tr>
+{% endmacro %}

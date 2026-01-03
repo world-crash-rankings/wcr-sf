@@ -22,4 +22,64 @@ class PlayerRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['nameUrl' => $nameUrl]);
     }
+
+    /**
+     * @return Player[]
+     */
+    public function findByTotalRank(int $limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->where('p.totalRank <= :limit')
+            ->setParameter('limit', $limit)
+            ->orderBy('p.total', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function findByAvgPosRank(int $limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->where('p.avgPosRank <= :limit')
+            ->setParameter('limit', $limit)
+            ->orderBy('p.avgPos', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function findByAvgStarsRank(int $limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->where('p.avgStarsRank <= :limit')
+            ->setParameter('limit', $limit)
+            ->orderBy('p.avgStars', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function findByAvgPercentRank(int $limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->where('p.avgPercentRank <= :limit')
+            ->setParameter('limit', $limit)
+            ->orderBy('p.avgPercent', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }
