@@ -434,4 +434,131 @@ class ScoreRepository extends ServiceEntityRepository
 
         return $query;
     }
+
+    /**
+     * Get best videos for each zone with optional filters
+     *
+     * @param array<string, string> $params
+     * @return list<Score>
+     */
+    public function getBestVideos(array $params): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // Build WHERE conditions for subquery
+        $conditions = ['lookup.proof_link IS NOT NULL', "lookup.proof_type IN ('Replay', 'Live')"];
+        $parameters = [];
+
+        if (isset($params['platform'])) {
+            $conditions[] = 'lookup.platform = :platform';
+            $parameters['platform'] = $params['platform'];
+        }
+
+        if (isset($params['freq'])) {
+            $conditions[] = 'lookup.freq = :freq';
+            $parameters['freq'] = $params['freq'];
+        }
+
+        if (isset($params['proof_type'])) {
+            $conditions[] = 'lookup.proof_type = :proof_type';
+            $parameters['proof_type'] = $params['proof_type'];
+        }
+
+        if (isset($params['glitch'])) {
+            $conditions[] = 'lookup.glitch = :glitch';
+            $parameters['glitch'] = $params['glitch'];
+        }
+
+        $orderField = 'lookup.score';
+        if (isset($params['max_value']) && $params['max_value'] === 'damage') {
+            $orderField = 'lookup.damage';
+            $conditions[] = 'lookup.damage IS NOT NULL';
+        }
+
+        $whereClause = implode(' AND ', $conditions);
+
+        $sql = "
+            SELECT s.*
+            FROM scores s
+            WHERE s.id = (
+                SELECT lookup.id
+                FROM scores lookup
+                WHERE lookup.zone_id = s.zone_id
+                  AND {$whereClause}
+                ORDER BY {$orderField} DESC
+                LIMIT 1
+            )
+            ORDER BY s.zone_id ASC
+        ";
+
+        $result = $conn->executeQuery($sql, $parameters);
+        $scoreIds = array_column($result->fetchAllAssociative(), 'id');
+
+        if (empty($scoreIds)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->where('s.id IN (:ids)')
+            ->setParameter('ids', $scoreIds)
+            ->orderBy('z.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get best multi videos for each zone
+     *
+     * @return list<Score>
+     */
+    public function getBestMultiVideos(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "
+            SELECT s.*
+            FROM scores s
+            WHERE s.id = (
+                SELECT lookup.id
+                FROM scores lookup
+                WHERE lookup.zone_id = s.zone_id
+                  AND lookup.proof_link IS NOT NULL
+                  AND lookup.proof_type IN ('Replay', 'Live')
+                  AND lookup.multi IS NOT NULL
+                ORDER BY lookup.multi DESC
+                LIMIT 1
+            )
+            ORDER BY s.zone_id ASC
+        ";
+
+        $result = $conn->executeQuery($sql);
+        $scoreIds = array_column($result->fetchAllAssociative(), 'id');
+
+        if (empty($scoreIds)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'country')
+            ->addSelect('country')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->where('s.id IN (:ids)')
+            ->setParameter('ids', $scoreIds)
+            ->orderBy('z.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
