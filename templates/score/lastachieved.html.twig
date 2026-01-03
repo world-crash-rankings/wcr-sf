@@ -33,7 +33,7 @@
                     <table class="table table-striped table-hover mb-0">
                         <tbody>
                             {% for score in scores %}
-                                {{ macros.score_row(score.chartRank ?? '-', score, true) }}
+                                {{ macros.video_score_row(score.chartRank ?? '-', score, true) }}
                             {% endfor %}
                         </tbody>
                     </table>
