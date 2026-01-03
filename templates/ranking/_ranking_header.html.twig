@@ -1,0 +1,41 @@
+{% set rankings = {
+    'ap': {
+        'name': 'Average Position (AP)',
+        'route': 'rankings_ap',
+        'description': 'The average of a players top-25 positioning from each zone. For each zone unplaced the value 30 is used. To enter this ranking at least 1 score in a zone top-25 is needed.'
+    },
+    'total': {
+        'name': 'Total',
+        'route': 'rankings_total',
+        'description': 'Personal Record from each zone summarized. Shows the 50 best known totals.'
+    },
+    'stars': {
+        'name': 'Stars',
+        'route': 'rankings_stars',
+        'description': 'Average stars ranking'
+    },
+    'percent': {
+        'name': '% WR',
+        'route': 'rankings_percent',
+        'description': 'Percentage world record ranking'
+    }
+} %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h1 title="{{ rankings[current_ranking].description }}">
+            {{ rankings[current_ranking].name }} Ranking
+        </h1>
+
+        <ul class="nav nav-tabs mb-3">
+            {% for key, ranking in rankings %}
+                <li class="nav-item">
+                    <a class="nav-link {% if key == current_ranking %}active{% endif %}"
+                       href="{{ path(ranking.route) }}">
+                        {{ ranking.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
