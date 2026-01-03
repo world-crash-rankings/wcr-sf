@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% import 'zone/_macros.html.twig' as macros %}
+
+{% block title %}Last Achieved Scores - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h1>Scores</h1>
+
+        {# Navigation tabs #}
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('scores_lastadded') }}">
+                    Last Added
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ path('scores_lastachieved') }}">
+                    Last Achieved
+                </a>
+            </li>
+        </ul>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h2 class="mb-0">Latest Scores Achieved</h2>
+            </div>
+            <div class="card-body p-0">
+                {% if scores is empty %}
+                    <p class="text-center text-muted p-4">No scores found.</p>
+                {% else %}
+                    <table class="table table-striped table-hover mb-0">
+                        <tbody>
+                            {% for score in scores %}
+                                {{ macros.score_row(score.chartRank ?? '-', score, true) }}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Pagination #}
+        {% if scores.pageCount > 1 %}
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(scores) }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

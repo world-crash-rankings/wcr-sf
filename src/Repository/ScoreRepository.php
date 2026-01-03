@@ -384,4 +384,54 @@ class ScoreRepository extends ServiceEntityRepository
 
         return $query;
     }
+
+    /**
+     * Get query for all last added scores (for pagination)
+     *
+     * @return \Doctrine\ORM\Query<int, Score>
+     */
+    public function getLastAddedScoresQuery(): \Doctrine\ORM\Query
+    {
+        /** @var \Doctrine\ORM\Query<int, Score> $query */
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->leftJoin('s.car', 'car')
+            ->addSelect('car')
+            ->leftJoin('s.strat', 'st')
+            ->addSelect('st')
+            ->orderBy('s.registration', 'DESC')
+            ->getQuery();
+
+        return $query;
+    }
+
+    /**
+     * Get query for all last achieved scores (for pagination)
+     *
+     * @return \Doctrine\ORM\Query<int, Score>
+     */
+    public function getLastAchievedScoresQuery(): \Doctrine\ORM\Query
+    {
+        /** @var \Doctrine\ORM\Query<int, Score> $query */
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->leftJoin('s.car', 'car')
+            ->addSelect('car')
+            ->leftJoin('s.strat', 'st')
+            ->addSelect('st')
+            ->orderBy('s.realisation', 'DESC')
+            ->getQuery();
+
+        return $query;
+    }
 }
