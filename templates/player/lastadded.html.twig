@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+{% import 'zone/_macros.html.twig' as macros %}
+
+{% block title %}{{ player.name }} - Last Added - {{ parent() }}{% endblock %}
+
+{% block body %}
+{% set active_tab = 'lastadded' %}
+{% include 'player/_header.html.twig' %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h2 class="mb-0" title="Latest scores added to database">Latest Scores Added</h2>
+            </div>
+            <div class="card-body p-0">
+                {% if latests is empty %}
+                    <p class="text-center text-muted p-4">No scores found.</p>
+                {% else %}
+                    <table class="table table-striped table-hover mb-0">
+                        <tbody>
+                            {% for score in latests %}
+                                <tr>
+                                    {# Zone name #}
+                                    <td>
+                                        <a href="{{ path('zone', {'id': score.zone.id}) }}" class="text-decoration-none">
+                                            {{ score.zone.id }} - {{ score.zone.name }}
+                                        </a>
+                                    </td>
+
+                                    {# Score #}
+                                    <td class="text-end"><strong>{{ score.score|number_format(0, '.', ',') }}</strong></td>
+
+                                    {# Car image #}
+                                    <td class="text-center">
+                                        {% if score.car %}
+                                            <img src="{{ asset('img/cars/' ~ score.car.name|car_image ~ '.png') }}"
+                                                 alt="{{ score.car.name }}"
+                                                 title="{{ score.car.name }}"
+                                                 width="40" height="20">
+                                        {% endif %}
+                                    </td>
+
+                                    {# Platform icon #}
+                                    <td class="text-center">
+                                        {% if score.platform %}
+                                            <img src="{{ asset('img/logos/' ~ score.platform.value|lower ~ '.png') }}"
+                                                 alt="{{ score.platform.value }}"
+                                                 title="{{ score.platform.value }}"
+                                                 width="24" height="24">
+                                        {% endif %}
+                                    </td>
+
+                                    {# Frequency/Version image #}
+                                    <td class="text-center">
+                                        {% if score.freq and score.version %}
+                                            <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}"
+                                                 alt="{{ score.freq.value }} {{ score.version.value }}"
+                                                 width="32" height="32">
+                                        {% elseif score.freq %}
+                                            <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_.png') }}"
+                                                 alt="{{ score.freq.value }}"
+                                                 width="32" height="32">
+                                        {% elseif score.version %}
+                                            <img src="{{ asset('img/logos/_' ~ score.version.value|lower ~ '.png') }}"
+                                                 alt="{{ score.version.value }}"
+                                                 width="32" height="32">
+                                        {% endif %}
+                                    </td>
+
+                                    {# Rank #}
+                                    <td class="text-center">
+                                        {% if score.chartRank %}
+                                            <span class="badge bg-secondary">#{{ score.chartRank }}</span>
+                                        {% endif %}
+                                    </td>
+
+                                    {# Proof type icon #}
+                                    <td class="text-center">
+                                        {% if score.proofType %}
+                                            {% if score.proofLink %}
+                                                <a href="{{ score.proofLink }}" target="_blank">
+                                                    <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}"
+                                                         alt="{{ score.proofType.value }}"
+                                                         title="{{ score.proofType.value }}"
+                                                         width="24" height="24">
+                                                </a>
+                                            {% else %}
+                                                <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}"
+                                                     alt="{{ score.proofType.value }}"
+                                                     title="{{ score.proofType.value }}"
+                                                     width="24" height="24">
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+
+                                    {# Date #}
+                                    <td class="text-end text-muted">
+                                        {{ score.registration|date('F j, Y') }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Pagination #}
+        {% if latests.pageCount > 1 %}
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(latests) }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

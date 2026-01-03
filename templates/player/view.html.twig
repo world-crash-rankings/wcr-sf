@@ -4,36 +4,12 @@
 {% block title %}{{ player.name }} - {{ parent() }}{% endblock %}
 
 {% block body %}
-{# Player Header #}
-<div class="row mt-4">
+{% set active_tab = 'view' %}
+{% include 'player/_header.html.twig' %}
+
+{# Player stats cards #}
+<div class="row">
     <div class="col-12">
-        <div class="d-flex align-items-center mb-3">
-            {# Country flag #}
-            <img src="{{ asset('img/flags/64/' ~ player.country.iso ~ '.png') }}"
-                 alt="{{ player.country.name }}"
-                 title="{{ player.country.name }}"
-                 height="64"
-                 class="me-3">
-
-            {# Player name and info #}
-            <div>
-                <h1 class="mb-1">{{ player.name }}</h1>
-                <div class="text-muted">
-                    {% if player.avgPosRank %}
-                        <span class="badge bg-primary me-2">WCR #{{ player.avgPosRank }}</span>
-                    {% endif %}
-                    {% for platform in platforms %}
-                        <img src="{{ asset('img/logos/' ~ platform|lower ~ '.png') }}"
-                             alt="{{ platform }}"
-                             title="{{ platform }}"
-                             width="24" height="24"
-                             class="me-1">
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        {# Player stats cards #}
         <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <div class="card">
@@ -92,12 +68,8 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-{# Personal Records Section #}
-<div class="row">
-    <div class="col-12">
+        {# Personal Records Section #}
         <div class="card">
             <div class="card-header bg-primary text-white text-center">
                 <h2 class="mb-0">Personal Records</h2>
@@ -109,7 +81,7 @@
                     <table class="table table-striped table-hover mb-0">
                         <tbody>
                             {% for score in personalRecords %}
-                                {{ macros.score_row(score.chartRank ?? '-', score, true) }}
+                                {{ macros.player_score_row(score.chartRank ?? '-', score, true) }}
                             {% endfor %}
                         </tbody>
                     </table>

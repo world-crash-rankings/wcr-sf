@@ -26,9 +26,15 @@ class ScoreRepository extends ServiceEntityRepository
     public function findPersonalRecords(Player $player): array
     {
         return $this->createQueryBuilder('s')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
             ->where('s.player = :player')
             ->andWhere('s.prEntry = true')
+            ->andWhere('s.chartRank IS NOT NULL')
             ->setParameter('player', $player)
+            ->orderBy('z.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -331,5 +337,51 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('z.id', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Get query for last added scores by player (for pagination)
+     *
+     * @return \Doctrine\ORM\Query<int, Score>
+     */
+    public function getLastAddedQuery(Player $player): \Doctrine\ORM\Query
+    {
+        /** @var \Doctrine\ORM\Query<int, Score> $query */
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.strat', 'st')
+            ->addSelect('st')
+            ->where('s.player = :player')
+            ->setParameter('player', $player)
+            ->orderBy('s.registration', 'DESC')
+            ->getQuery();
+
+        return $query;
+    }
+
+    /**
+     * Get query for last achieved scores by player (for pagination)
+     *
+     * @return \Doctrine\ORM\Query<int, Score>
+     */
+    public function getLastAchievedQuery(Player $player): \Doctrine\ORM\Query
+    {
+        /** @var \Doctrine\ORM\Query<int, Score> $query */
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.strat', 'st')
+            ->addSelect('st')
+            ->where('s.player = :player')
+            ->setParameter('player', $player)
+            ->orderBy('s.realisation', 'DESC')
+            ->getQuery();
+
+        return $query;
     }
 }

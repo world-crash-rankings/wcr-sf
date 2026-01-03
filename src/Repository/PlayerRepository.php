@@ -98,6 +98,21 @@ class PlayerRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get all players ordered by name
+     *
+     * @return Player[]
+     */
+    public function findAllOrderedByName(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Get distinct platforms used by a player
      *
      * @return string[]
