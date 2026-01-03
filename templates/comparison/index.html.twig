@@ -1,0 +1,274 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if player1 is defined and player2 is defined %}
+        {{ player1.name }} VS {{ player2.name }} - {{ parent() }}
+    {% else %}
+        Player Comparison - {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        {# Header with both players #}
+        <div class="row mb-4">
+            <div class="col-md-5">
+                {% if player1 is defined %}
+                    <div class="d-flex align-items-center">
+                        <img src="{{ asset('img/flags/64/' ~ player1.country.iso ~ '.png') }}"
+                             alt="{{ player1.country.name }}"
+                             title="{{ player1.country.name }}"
+                             height="64"
+                             class="me-3">
+                        <div>
+                            <h2 class="mb-1">{{ player1.name }}</h2>
+                            <div class="text-muted">
+                                {% if player1.avgPosRank %}
+                                    <span class="badge bg-primary">WCR #{{ player1.avgPosRank }}</span>
+                                {% endif %}
+                                {% for platform in platforms1 %}
+                                    <img src="{{ asset('img/logos/' ~ platform|lower ~ '.png') }}"
+                                         alt="{{ platform }}"
+                                         width="24" height="24"
+                                         class="me-1">
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-2 text-center">
+                <img src="{{ asset('img/vs.png') }}" alt="VS" title="Compare your personal records against another Crasher" height="200">
+            </div>
+            <div class="col-md-5">
+                {% if player2 is defined %}
+                    <div class="d-flex align-items-center justify-content-end">
+                        <div class="text-end">
+                            <h2 class="mb-1">{{ player2.name }}</h2>
+                            <div class="text-muted">
+                                {% if player2.avgPosRank %}
+                                    <span class="badge bg-primary">WCR #{{ player2.avgPosRank }}</span>
+                                {% endif %}
+                                {% for platform in platforms2 %}
+                                    <img src="{{ asset('img/logos/' ~ platform|lower ~ '.png') }}"
+                                         alt="{{ platform }}"
+                                         width="24" height="24"
+                                         class="ms-1">
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <img src="{{ asset('img/flags/64/' ~ player2.country.iso ~ '.png') }}"
+                             alt="{{ player2.country.name }}"
+                             title="{{ player2.country.name }}"
+                             height="64"
+                             class="ms-3">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Selection Form #}
+        <div class="row mb-4">
+            {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+                <div class="col-md-5 text-center">
+                    {{ form_widget(form.player1) }}
+                </div>
+                <div class="col-md-2 text-center">
+                    {{ form_widget(form.submit) }}
+                </div>
+                <div class="col-md-5 text-center">
+                    {{ form_widget(form.player2) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+
+        {% if player1 is defined and player2 is defined %}
+            {# Rankings Comparison #}
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="mb-0">Rankings</h2>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <tbody>
+                            {# Average Position #}
+                            <tr title="Average Position" class="fs-4">
+                                <td class="col-5 text-center">{{ player1.avgPos }}</td>
+                                <td class="col-2 text-center">
+                                    {% if player1.avgPos < player2.avgPos %}
+                                        <img src="{{ asset('img/win.png') }}" alt="Win" width="32" height="32">
+                                    {% elseif player1.avgPos > player2.avgPos %}
+                                        <img src="{{ asset('img/lose.png') }}" alt="Lose" width="32" height="32">
+                                    {% else %}
+                                        <img src="{{ asset('img/even.png') }}" alt="Even" width="32" height="32">
+                                    {% endif %}
+                                </td>
+                                <td class="col-5 text-center">{{ player2.avgPos }}</td>
+                            </tr>
+                            {# Total #}
+                            <tr title="Total" class="fs-4">
+                                <td class="col-5 text-center">${{ player1.total|number_format(0, '.', ',') }}</td>
+                                <td class="col-2 text-center">
+                                    {% if player1.total > player2.total %}
+                                        <img src="{{ asset('img/win.png') }}" alt="Win" width="32" height="32">
+                                    {% elseif player1.total < player2.total %}
+                                        <img src="{{ asset('img/lose.png') }}" alt="Lose" width="32" height="32">
+                                    {% else %}
+                                        <img src="{{ asset('img/even.png') }}" alt="Even" width="32" height="32">
+                                    {% endif %}
+                                </td>
+                                <td class="col-5 text-center">${{ player2.total|number_format(0, '.', ',') }}</td>
+                            </tr>
+                            {# % WR #}
+                            <tr title="% WR" class="fs-4">
+                                <td class="col-5 text-center">{{ player1.avgPercent }}%</td>
+                                <td class="col-2 text-center">
+                                    {% if player1.avgPercent > player2.avgPercent %}
+                                        <img src="{{ asset('img/win.png') }}" alt="Win" width="32" height="32">
+                                    {% elseif player1.avgPercent < player2.avgPercent %}
+                                        <img src="{{ asset('img/lose.png') }}" alt="Lose" width="32" height="32">
+                                    {% else %}
+                                        <img src="{{ asset('img/even.png') }}" alt="Even" width="32" height="32">
+                                    {% endif %}
+                                </td>
+                                <td class="col-5 text-center">{{ player2.avgPercent }}%</td>
+                            </tr>
+                            {# Stars #}
+                            <tr title="Stars" class="fs-4">
+                                <td class="col-5 text-center" title="{{ player1.avgStars }}">
+                                    {% for i in 1..10 %}
+                                        {% if i <= player1.avgStars %}
+                                            <img src="{{ asset('img/stars/full.png') }}" alt="★" width="20" height="20">
+                                        {% else %}
+                                            <img src="{{ asset('img/stars/empty.png') }}" alt="☆" width="20" height="20">
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td class="col-2 text-center">
+                                    {% if player1.avgStars > player2.avgStars %}
+                                        <img src="{{ asset('img/win.png') }}" alt="Win" width="32" height="32">
+                                    {% elseif player1.avgStars < player2.avgStars %}
+                                        <img src="{{ asset('img/lose.png') }}" alt="Lose" width="32" height="32">
+                                    {% else %}
+                                        <img src="{{ asset('img/even.png') }}" alt="Even" width="32" height="32">
+                                    {% endif %}
+                                </td>
+                                <td class="col-5 text-center" title="{{ player2.avgStars }}">
+                                    {% for i in 1..10 %}
+                                        {% if i <= player2.avgStars %}
+                                            <img src="{{ asset('img/stars/full.png') }}" alt="★" width="20" height="20">
+                                        {% else %}
+                                            <img src="{{ asset('img/stars/empty.png') }}" alt="☆" width="20" height="20">
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# Personal Records Comparison #}
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="mb-0">Personal Records</h2>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <tbody>
+                            {% set wins1 = 0 %}
+                            {% set wins2 = 0 %}
+                            {% set pr1Index = 0 %}
+                            {% set pr2Index = 0 %}
+
+                            {% for zone in zones %}
+                                {% set score1 = 0 %}
+                                {% set rank1 = null %}
+                                {% set score2 = 0 %}
+                                {% set rank2 = null %}
+
+                                {# Find PR for player 1 #}
+                                {% for pr in personalRecords1 %}
+                                    {% if pr.zone.id == zone.id %}
+                                        {% set score1 = pr.score %}
+                                        {% set rank1 = pr.chartRank %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {# Find PR for player 2 #}
+                                {% for pr in personalRecords2 %}
+                                    {% if pr.zone.id == zone.id %}
+                                        {% set score2 = pr.score %}
+                                        {% set rank2 = pr.chartRank %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {# Count wins #}
+                                {% if score1 > score2 %}
+                                    {% set wins1 = wins1 + 1 %}
+                                {% elseif score1 < score2 %}
+                                    {% set wins2 = wins2 + 1 %}
+                                {% endif %}
+
+                                <tr title="{{ zone.id }} - {{ zone.name }}" class="fs-5">
+                                    <td class="col-1 text-center">
+                                        {% if rank1 and rank1 <= 25 %}
+                                            {% if rank1 <= 3 %}
+                                                <img src="{{ asset('img/medals/' ~ rank1 ~ '.png') }}" alt="Rank {{ rank1 }}" width="36" height="36">
+                                            {% else %}
+                                                #{{ rank1 }}
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td class="col-4 text-center">${{ score1|number_format(0, '.', ',') }}</td>
+                                    <td class="col-2 text-center">
+                                        {% if score1 > score2 %}
+                                            <img src="{{ asset('img/win.png') }}" alt="Win" width="32" height="32">
+                                        {% elseif score1 < score2 %}
+                                            <img src="{{ asset('img/lose.png') }}" alt="Lose" width="32" height="32">
+                                        {% else %}
+                                            <img src="{{ asset('img/even.png') }}" alt="Even" width="32" height="32">
+                                        {% endif %}
+                                    </td>
+                                    <td class="col-4 text-center">${{ score2|number_format(0, '.', ',') }}</td>
+                                    <td class="col-1 text-center">
+                                        {% if rank2 and rank2 <= 25 %}
+                                            {% if rank2 <= 3 %}
+                                                <img src="{{ asset('img/medals/' ~ rank2 ~ '.png') }}" alt="Rank {{ rank2 }}" width="36" height="36">
+                                            {% else %}
+                                                #{{ rank2 }}
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            {# Total Wins #}
+                            <tr title="Total Wins" class="fs-4 fw-bold">
+                                <td class="col-1 text-center"></td>
+                                <td class="col-4 text-center">{{ wins1 }}</td>
+                                <td class="col-2 text-center">
+                                    {% if wins1 > wins2 %}
+                                        <img src="{{ asset('img/win.png') }}" alt="Win" width="32" height="32">
+                                    {% elseif wins1 < wins2 %}
+                                        <img src="{{ asset('img/lose.png') }}" alt="Lose" width="32" height="32">
+                                    {% else %}
+                                        <img src="{{ asset('img/even.png') }}" alt="Even" width="32" height="32">
+                                    {% endif %}
+                                </td>
+                                <td class="col-4 text-center">{{ wins2 }}</td>
+                                <td class="col-1 text-center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
