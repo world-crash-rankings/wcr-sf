@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: https://staging.crashmoderankings.com/sitemap.xml
