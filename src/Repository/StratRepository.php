@@ -67,4 +67,15 @@ class StratRepository extends ServiceEntityRepository
 
         return $strats;
     }
+
+    /**
+     * Get QueryBuilder for all strats ordered by ID (for admin pagination)
+     */
+    public function findAllOrderedByIdQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->orderBy('s.id', 'ASC');
+    }
 }

@@ -138,6 +138,12 @@
                             Zones
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'admin_strat' %}active{% endif %}"
+                           href="{{ path('admin_strat_list') }}">
+                            Strats
+                        </a>
+                    </li>
                     {# Add more admin sections here #}
                 </ul>
             </div>
