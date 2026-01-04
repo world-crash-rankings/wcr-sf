@@ -150,6 +150,12 @@
                             Countries
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'admin_score' %}active{% endif %}"
+                           href="{{ path('admin_score_list') }}">
+                            Scores
+                        </a>
+                    </li>
                     {# Add more admin sections here #}
                 </ul>
             </div>

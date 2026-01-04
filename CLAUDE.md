@@ -136,6 +136,13 @@ When migrating a ZF2 module to Symfony:
 5. **Views**: ZF2 `.phtml` → Twig templates in `templates/`
 6. **Services**: ZF2 service manager → Symfony DI container autowiring
 
+## Git Workflow
+
+- **NEVER create git commits** - The user handles all commits themselves
+- **NEVER run `git add`, `git commit`, or `git push` commands**
+- Only run `git status` or `git diff` for informational purposes when explicitly requested
+- If the user asks to "commit changes", only explain what files were modified and let them commit
+
 ## Important Notes
 
 - **Language**: The website is entirely in English - all content, messages, and UI text must be in English only
@@ -144,3 +151,4 @@ When migrating a ZF2 module to Symfony:
 - **No Docker**: This project runs without Docker (unlike some Symfony projects)
 - **Legacy Reference**: Always refer to `../wcr-zf2/CLAUDE.md` for understanding the original business logic
 - **Database Compatibility**: Must maintain compatibility with existing MySQL database structure and stored procedures
+- **Turbo Forms**: Add `data-turbo="false"` to forms that have issues with Symfony UX Turbo intercepting submissions
