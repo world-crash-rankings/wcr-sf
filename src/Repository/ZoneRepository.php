@@ -28,4 +28,13 @@ class ZoneRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Get QueryBuilder for all zones ordered by ID (for admin pagination)
+     */
+    public function findAllOrderedByIdQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('z')
+            ->orderBy('z.id', 'ASC');
+    }
 }
