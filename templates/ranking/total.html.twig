@@ -3,6 +3,35 @@
 
 {% block title %}Total Score Ranking - {{ parent() }}{% endblock %}
 
+{% block meta_description %}Total Score Ranking - Top {{ players|length }} Burnout 2 Crash Mode players by cumulative score{% if players[0] is defined %}. Leader: {{ players[0].name }} with ${{ players[0].total|number_format(0, '.', ',') }}{% endif %}.{% endblock %}
+
+{% block meta_keywords %}total score ranking, burnout 2 leaderboard, crash mode total scores{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Total Score Ranking",
+  "description": "Top Burnout 2 Crash Mode players ranked by total score",
+  "numberOfItems": {{ players|length }},
+  "itemListElement": [
+    {% for player in players|slice(0, 10) %}
+    {
+      "@type": "ListItem",
+      "position": {{ player.totalRank }},
+      "item": {
+        "@type": "Person",
+        "name": "{{ player.name }}",
+        "url": "{{ url('player_view', {nameUrl: player.nameUrl}) }}"
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block body %}
 {% set current_ranking = 'total' %}
 {% include 'ranking/_ranking_header.html.twig' %}

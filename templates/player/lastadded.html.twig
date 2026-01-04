@@ -3,6 +3,12 @@
 
 {% block title %}{{ player.name }} - Last Added - {{ parent() }}{% endblock %}
 
+{% block meta_description %}Latest scores added to the database by {{ player.name }}. Track recent submissions and new records in Burnout 2 Crash Mode.{% endblock %}
+
+{% block meta_keywords %}{{ player.name }} latest scores, recent submissions, new records{% endblock %}
+
+{% block og_type %}profile{% endblock %}
+
 {% block body %}
 {% set active_tab = 'lastadded' %}
 {% include 'player/_header.html.twig' %}

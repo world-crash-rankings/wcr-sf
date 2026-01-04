@@ -8,6 +8,18 @@
     {% endif %}
 {% endblock %}
 
+{% block meta_description %}
+    {% if player1 is defined and player2 is defined %}
+        Compare {{ player1.name }} vs {{ player2.name }} - Head-to-head statistics, zone scores, and performance comparison for Burnout 2 Crash Mode.
+    {% else %}
+        Compare Burnout 2 Crash Mode players head-to-head. View statistics, rankings, and personal records side by side.
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}player comparison, vs, player statistics, head to head{% endblock %}
+
+{% block meta_robots %}noindex, follow{% endblock %}
+
 {% block body %}
 <div class="row mt-4">
     <div class="col-12">

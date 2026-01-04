@@ -1,6 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Home - World Crash Rankings{% endblock %}
+
+{% block meta_description %}Latest news and updates from World Crash Rankings. Track the best Burnout 2 Crash Mode players, scores, and world records since 2005.{% endblock %}
+
+{% block meta_keywords %}burnout 2 news, crash mode updates, latest scores, gaming news, world crash rankings{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "World Crash Rankings",
+  "url": "{{ app.request.schemeAndHttpHost }}",
+  "description": "The ultimate resource for Burnout 2: Point of Impact Crash Mode rankings, player statistics, zone records, and competitive leaderboards since 2005"
+}
+</script>
+{% endblock %}
 
 {% block body %}
 <div class="home-banner mb-4">

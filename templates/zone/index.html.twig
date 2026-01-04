@@ -4,6 +4,22 @@
 
 {% block title %}{{ zone.name }} - Scores - World Crash Rankings{% endblock %}
 
+{% block meta_description %}{{ zone.name }} - Burnout 2 Crash Mode rankings. Top 25 scores{% if topscores[0] is defined %}, world record: ${{ topscores[0].score|number_format(0, '.', ',') }} held by {{ topscores[0].player.name }}{% endif %}. View NGS, freeze, and sink scores.{% endblock %}
+
+{% block meta_keywords %}{{ zone.name }}, burnout 2 zone, crash mode {{ zone.name }}, world record{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Place",
+  "name": "{{ zone.name }}",
+  "description": "{{ zone.description }}",
+  "url": "{{ url('zone', {id: zone.id}) }}"
+}
+</script>
+{% endblock %}
+
 {% block body %}
 {{ zone_header.header(zone, 'scores') }}
 

@@ -3,6 +3,35 @@
 
 {% block title %}% WR Ranking - {{ parent() }}{% endblock %}
 
+{% block meta_description %}Percent World Record Ranking - Top {{ players|length }} Burnout 2 Crash Mode players by average percentage of world record{% if players[0] is defined %}. Leader: {{ players[0].name }} with {{ players[0].avgPercent }}% WR{% endif %}.{% endblock %}
+
+{% block meta_keywords %}percent wr ranking, world record percentage, burnout 2 leaderboard{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Percent WR Ranking",
+  "description": "Top Burnout 2 Crash Mode players ranked by average percent of world record",
+  "numberOfItems": {{ players|length }},
+  "itemListElement": [
+    {% for player in players|slice(0, 10) %}
+    {
+      "@type": "ListItem",
+      "position": {{ player.avgPercentRank }},
+      "item": {
+        "@type": "Person",
+        "name": "{{ player.name }}",
+        "url": "{{ url('player_view', {nameUrl: player.nameUrl}) }}"
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block body %}
 {% set current_ranking = 'percent' %}
 {% include 'ranking/_ranking_header.html.twig' %}

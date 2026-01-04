@@ -3,6 +3,22 @@
 
 {% block title %}{{ title }} Videos - {{ parent() }}{% endblock %}
 
+{% block meta_description %}{{ title }} Videos - Watch the best Burnout 2 Crash Mode {{ title|lower }} replays{% if videos|length > 0 %}. ${{ totalScore|number_format(0, '.', ',') }} combined score across {{ videos|length }} videos{% endif %}.{% endblock %}
+
+{% block meta_keywords %}burnout 2 videos, crash mode replays, {{ title|lower }} videos, gameplay videos{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGallery",
+  "name": "{{ title }} Videos",
+  "description": "Collection of {{ title }} gameplay videos from Burnout 2 Crash Mode",
+  "url": "{{ url('videos', {type: type}) }}"
+}
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="row mt-4">
     <div class="col-12">
