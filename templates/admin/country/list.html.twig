@@ -1,0 +1,61 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Country Management - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Country Management</h2>
+        <a href="{{ path('admin_country_add') }}" class="btn btn-primary">
+            Add
+        </a>
+    </div>
+
+    {% if countries.items|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Olympics (3 letters)</th>
+                        <th>ISO (2 letters)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for country in countries %}
+                        <tr>
+                            <td>{{ country.id }}</td>
+                            <td>{{ country.name }}</td>
+                            <td>{{ country.abr }}</td>
+                            <td>{{ country.iso }}</td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a href="{{ path('admin_country_edit', {id: country.id}) }}" class="btn btn-sm btn-warning">
+                                        Edit
+                                    </a>
+                                    <form method="post"
+                                          action="{{ path('admin_country_delete', {id: country.id}) }}"
+                                          onsubmit="return confirm('Are you sure you want to delete this country?');"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ country.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# Pagination #}
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(countries) }}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No countries found. <a href="{{ path('admin_country_add') }}">Create your first country</a>.
+        </div>
+    {% endif %}
+{% endblock %}
