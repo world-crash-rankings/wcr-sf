@@ -2,6 +2,12 @@
 
 {% block title %}{{ player.name }} - Info - {{ parent() }}{% endblock %}
 
+{% block meta_description %}Detailed statistics for {{ player.name }}: platform breakdown, car usage, proof types, and performance metrics in Burnout 2 Crash Mode.{% endblock %}
+
+{% block meta_keywords %}{{ player.name }} statistics, player info, platform stats, car usage{% endblock %}
+
+{% block og_type %}profile{% endblock %}
+
 {% block body %}
 {% set active_tab = 'info' %}
 {% include 'player/_header.html.twig' %}

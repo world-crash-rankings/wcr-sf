@@ -3,6 +3,21 @@
 
 {% block title %}{{ country.name }} - {{ parent() }}{% endblock %}
 
+{% block meta_description %}{{ country.name }} - Burnout 2 Crash Mode players and national records. View {{ players|length }} players from {{ country.name }} and their best scores.{% endblock %}
+
+{% block meta_keywords %}{{ country.name }} players, burnout 2 {{ country.name }}, crash mode by country{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Country",
+  "name": "{{ country.name }}",
+  "url": "{{ url('country_view', {nameUrl: country.nameUrl}) }}"
+}
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="row mt-4">
     <div class="col-12">

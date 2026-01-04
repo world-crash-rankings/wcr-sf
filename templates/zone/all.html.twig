@@ -2,6 +2,35 @@
 
 {% block title %}Zones - World Crash Rankings{% endblock %}
 
+{% block meta_description %}Complete list of Burnout 2 Crash Mode zones with current world records. View top scores, players, and statistics for all {{ zones|length }} tracks.{% endblock %}
+
+{% block meta_keywords %}burnout 2 zones, crash mode tracks, world records, zone list{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Burnout 2 Crash Mode Zones",
+  "description": "Complete list of all crash mode zones with world records",
+  "numberOfItems": {{ zones|length }},
+  "itemListElement": [
+    {% for zone in zones %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      "item": {
+        "@type": "Place",
+        "name": "{{ zone.name }}",
+        "url": "{{ url('zone', {id: zone.id}) }}"
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block body %}
 <h1>Zones</h1>
 

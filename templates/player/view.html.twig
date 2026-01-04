@@ -3,6 +3,27 @@
 
 {% block title %}{{ player.name }} - {{ parent() }}{% endblock %}
 
+{% block meta_description %}{{ player.name }} - Burnout 2 Crash Mode player profile. View personal records, rankings (AP: #{{ player.avgPosRank ?? 'N/A' }}, Total: #{{ player.totalRank ?? 'N/A' }}), and statistics across all zones.{% endblock %}
+
+{% block meta_keywords %}{{ player.name }}, burnout 2 player, crash mode statistics, player rankings{% endblock %}
+
+{% block og_type %}profile{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ player.name }}",
+  "nationality": {
+    "@type": "Country",
+    "name": "{{ player.country.name }}"
+  },
+  "url": "{{ url('player_view', {nameUrl: player.nameUrl}) }}"
+}
+</script>
+{% endblock %}
+
 {% block body %}
 {% set active_tab = 'view' %}
 {% include 'player/_header.html.twig' %}

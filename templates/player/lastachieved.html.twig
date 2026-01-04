@@ -3,6 +3,12 @@
 
 {% block title %}{{ player.name }} - Last Achieved - {{ parent() }}{% endblock %}
 
+{% block meta_description %}Recently achieved scores by {{ player.name }} in chronological order. View latest accomplishments in Burnout 2 Crash Mode.{% endblock %}
+
+{% block meta_keywords %}{{ player.name }} achievements, recent scores, chronological records{% endblock %}
+
+{% block og_type %}profile{% endblock %}
+
 {% block body %}
 {% set active_tab = 'lastachieved' %}
 {% include 'player/_header.html.twig' %}

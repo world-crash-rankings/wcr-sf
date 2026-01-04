@@ -2,6 +2,35 @@
 
 {% block title %}Players - {{ parent() }}{% endblock %}
 
+{% block meta_description %}Browse all Burnout 2 Crash Mode players. View rankings, statistics, and world records for {{ players|length }} competitive players.{% endblock %}
+
+{% block meta_keywords %}burnout 2 players, crash mode competitors, player directory{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Burnout 2 Crash Mode Players",
+  "description": "Complete list of all players in the World Crash Rankings",
+  "numberOfItems": {{ players|length }},
+  "itemListElement": [
+    {% for player in players %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      "item": {
+        "@type": "Person",
+        "name": "{{ player.name }}",
+        "url": "{{ url('player_view', {nameUrl: player.nameUrl}) }}"
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="row mt-4">
     <div class="col-12">
