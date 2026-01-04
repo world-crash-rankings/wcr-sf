@@ -1,0 +1,61 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Strat Management - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Strat Management</h2>
+        <a href="{{ path('admin_strat_add') }}" class="btn btn-primary">
+            Add
+        </a>
+    </div>
+
+    {% if strats.items|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Zone</th>
+                        <th>Name</th>
+                        <th>Best Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for strat in strats %}
+                        <tr>
+                            <td>{{ strat.id }}</td>
+                            <td>{{ strat.zone.name }}</td>
+                            <td>{{ strat.name }}</td>
+                            <td>{{ strat.bestTotal|number_format }}</td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a href="{{ path('admin_strat_edit', {id: strat.id}) }}" class="btn btn-sm btn-warning">
+                                        Edit
+                                    </a>
+                                    <form method="post"
+                                          action="{{ path('admin_strat_delete', {id: strat.id}) }}"
+                                          onsubmit="return confirm('Are you sure you want to delete this strat?');"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ strat.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# Pagination #}
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(strats) }}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No strats found. <a href="{{ path('admin_strat_add') }}">Create your first strat</a>.
+        </div>
+    {% endif %}
+{% endblock %}

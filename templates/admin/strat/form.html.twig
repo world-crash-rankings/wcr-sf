@@ -1,0 +1,95 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ is_edit ? 'Edit Strat' : 'Add Strat' }} - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="mb-4">
+        <h2>{{ is_edit ? 'Edit Strat' : 'Add Strat' }}</h2>
+    </div>
+
+    {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+        <div class="mb-3">
+            {{ form_label(form.zone) }}
+            {{ form_widget(form.zone, {'attr': {'class': 'form-select'}}) }}
+            {{ form_errors(form.zone) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Platforms</label>
+            <div class="form-check">
+                {{ form_widget(form.hz50, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.hz50, null, {'label_attr': {'class': 'form-check-label'}}) }}
+            </div>
+            <div class="form-check">
+                {{ form_widget(form.hz60, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.hz60, null, {'label_attr': {'class': 'form-check-label'}}) }}
+            </div>
+            <div class="form-check">
+                {{ form_widget(form.gc, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.gc, null, {'label_attr': {'class': 'form-check-label'}}) }}
+            </div>
+            <div class="form-check">
+                {{ form_widget(form.xbox, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.xbox, null, {'label_attr': {'class': 'form-check-label'}}) }}
+            </div>
+            <div class="form-check">
+                {{ form_widget(form.ps2, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.ps2, null, {'label_attr': {'class': 'form-check-label'}}) }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.bestDamage) }}
+            {{ form_widget(form.bestDamage, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.bestDamage) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.bestMulti) }}
+            {{ form_widget(form.bestMulti, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.bestMulti) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.bestTotal) }}
+            {{ form_widget(form.bestTotal, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.bestTotal) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cars</label>
+            <div class="row">
+                {% for choice in form.cars %}
+                    <div class="col-md-4 col-lg-3">
+                        <div class="form-check">
+                            {{ form_widget(choice, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(choice, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.cars) }}
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                {{ is_edit ? 'Update' : 'Add Strat' }}
+            </button>
+            <a href="{{ path('admin_strat_list') }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
