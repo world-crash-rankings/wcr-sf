@@ -43,4 +43,13 @@ class CountryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Get QueryBuilder for all countries ordered by name (for admin pagination)
+     */
+    public function findAllOrderedByNameQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.name', 'ASC');
+    }
 }
