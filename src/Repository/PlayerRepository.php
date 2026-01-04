@@ -152,4 +152,15 @@ class PlayerRepository extends ServiceEntityRepository
         $result = $conn->executeQuery($sql, ['playerId' => $playerId]);
         return array_column($result->fetchAllAssociative(), 'platform');
     }
+
+    /**
+     * Get QueryBuilder for all players ordered by name (for admin pagination)
+     */
+    public function findAllOrderedByNameQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.country', 'c')
+            ->addSelect('c')
+            ->orderBy('p.name', 'ASC');
+    }
 }

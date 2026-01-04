@@ -1,0 +1,78 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Player Management - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Player Management</h2>
+        <a href="{{ path('admin_player_add') }}" class="btn btn-primary">
+            Add Player
+        </a>
+    </div>
+
+    {% if players.items|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Country</th>
+                        <th>WCR Channel</th>
+                        <th>Personal Channel</th>
+                        <th>XBL Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                        <tr>
+                            <td>{{ player.id }}</td>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.country.name }}</td>
+                            <td>
+                                {% if player.wcrChannel %}
+                                    <a href="{{ player.wcrChannel }}" target="_blank" rel="noopener noreferrer">
+                                        Link
+                                    </a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if player.personnalChannel %}
+                                    <a href="{{ player.personnalChannel }}" target="_blank" rel="noopener noreferrer">
+                                        Link
+                                    </a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if player.xblTotal %}
+                                    <span class="badge bg-success">Yes</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_player_edit', {id: player.id}) }}" class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# Pagination #}
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(players) }}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No players found. <a href="{{ path('admin_player_add') }}">Create your first player</a>.
+        </div>
+    {% endif %}
+{% endblock %}

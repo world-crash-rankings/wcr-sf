@@ -1,0 +1,56 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ is_edit ? 'Edit Player' : 'Add Player' }} - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="mb-4">
+        <h2>{{ is_edit ? 'Edit Player' : 'Add Player' }}</h2>
+    </div>
+
+    {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+        <div class="mb-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.country) }}
+            {{ form_widget(form.country, {'attr': {'class': 'form-select'}}) }}
+            {{ form_errors(form.country) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.notes) }}
+            {{ form_widget(form.notes, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.notes) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.wcrChannel) }}
+            {{ form_widget(form.wcrChannel, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.wcrChannel) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.personnalChannel) }}
+            {{ form_widget(form.personnalChannel, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.personnalChannel) }}
+        </div>
+
+        <div class="mb-3 form-check">
+            {{ form_widget(form.xblTotal, {'attr': {'class': 'form-check-input'}}) }}
+            {{ form_label(form.xblTotal, null, {'label_attr': {'class': 'form-check-label'}}) }}
+            {{ form_errors(form.xblTotal) }}
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                {{ is_edit ? 'Update' : 'Add Player' }}
+            </button>
+            <a href="{{ path('admin_player_list') }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

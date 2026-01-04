@@ -126,6 +126,12 @@
                             News
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'admin_player' %}active{% endif %}"
+                           href="{{ path('admin_player_list') }}">
+                            Players
+                        </a>
+                    </li>
                     {# Add more admin sections here #}
                 </ul>
             </div>
