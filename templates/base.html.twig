@@ -74,6 +74,12 @@
                 </div>
             </nav>
 
+            {% if app.environment == 'staging' %}
+                <div class="alert alert-warning text-center mb-3 rounded-0 border-0 fw-bold py-3" role="alert" style="background-color: #ff9800; color: #000;">
+                    ⚠️ STAGING ENVIRONMENT - This is a test site with sample data ⚠️
+                </div>
+            {% endif %}
+
             <div class="container">
                 {% for message in app.flashes('success') %}
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
