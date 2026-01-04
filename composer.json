@@ -1,4 +1,6 @@
 {
+    "name": "worldcrashranking/wcr-sf",
+    "description": "World Crash Rankings - Burnout 2",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
