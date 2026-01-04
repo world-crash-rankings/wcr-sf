@@ -1,0 +1,63 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}News Management - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>News Management</h2>
+        <a href="{{ path('admin_news_add') }}" class="btn btn-primary">
+            Add
+        </a>
+    </div>
+
+    {% if news.items|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Content Preview</th>
+                        <th>Publication Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in news %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>
+                                <div class="content-preview">
+                                    {{ item.content|striptags|slice(0, 100) }}{% if item.content|striptags|length > 100 %}...{% endif %}
+                                </div>
+                            </td>
+                            <td>{{ item.registration|date('Y-m-d H:i') }}</td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a href="{{ path('admin_news_edit', {id: item.id}) }}" class="btn btn-sm btn-warning">
+                                        Edit
+                                    </a>
+                                    <form method="post"
+                                          action="{{ path('admin_news_delete', {id: item.id}) }}"
+                                          onsubmit="return confirm('Are you sure you want to delete this news?');"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# Pagination #}
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(news) }}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No news found. <a href="{{ path('admin_news_add') }}">Create your first news</a>.
+        </div>
+    {% endif %}
+{% endblock %}
