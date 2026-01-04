@@ -1,0 +1,123 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ is_edit ? 'Edit Score' : 'Add Score' }} - Zone {{ zone.id }} - {{ zone.name }} - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="mb-4">
+        <h2>{{ is_edit ? 'Edit Score' : 'Add Score' }}: Zone {{ zone.id }} - {{ zone.name }}</h2>
+    </div>
+
+    {{ form_start(form, {'attr': {'class': 'needs-validation', 'data-turbo': 'false'}}) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form_label(form.player) }}
+                    {{ form_widget(form.player, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.player) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.score) }}
+                    {{ form_widget(form.score, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.score) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.damage) }}
+                    {{ form_widget(form.damage, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.damage) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.multi) }}
+                    {{ form_widget(form.multi, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.multi) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.strat) }}
+                    {{ form_widget(form.strat, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.strat) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.car) }}
+                    {{ form_widget(form.car, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.car) }}
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form_widget(form.emulator, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(form.emulator, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                    {{ form_errors(form.emulator) }}
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form_widget(form.formerWr, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(form.formerWr, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                    {{ form_errors(form.formerWr) }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form_label(form.proofType) }}
+                    {{ form_widget(form.proofType, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.proofType) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.proofLink) }}
+                    {{ form_widget(form.proofLink, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.proofLink) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.platform) }}
+                    {{ form_widget(form.platform, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.platform) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.version) }}
+                    {{ form_widget(form.version, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.version) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.freq) }}
+                    {{ form_widget(form.freq, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.freq) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.glitch) }}
+                    {{ form_widget(form.glitch, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.glitch) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.realisation) }}
+                    {{ form_widget(form.realisation, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.realisation) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.inaccurate) }}
+                    {{ form_widget(form.inaccurate, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.inaccurate) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                {{ is_edit ? 'Update Score' : 'Add Score' }}
+            </button>
+            <a href="{{ path('admin_score_list') }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

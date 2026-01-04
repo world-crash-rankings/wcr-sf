@@ -1,0 +1,160 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Score Management - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Score Management</h2>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Add New Score</h5>
+            <form method="get" action="{{ path('admin_score_add', {id: 1}) }}" id="addScoreForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="addZoneSelect" class="form-label">Select Zone</label>
+                        <select class="form-select" id="addZoneSelect" name="zone_id" required>
+                            <option value="">Select a zone to add a score...</option>
+                            {% for zone in zones %}
+                                <option value="{{ zone.id }}">{{ zone.id }} - {{ zone.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success">Add Score for Selected Zone</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Search Scores</h5>
+            {{ form_start(search_form, {'attr': {'data-turbo': 'false'}}) }}
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        {{ form_label(search_form.player) }}
+                        {{ form_widget(search_form.player, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(search_form.player) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_label(search_form.zone) }}
+                        {{ form_widget(search_form.zone, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(search_form.zone) }}
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Search Scores</button>
+                    </div>
+                </div>
+            {{ form_end(search_form) }}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('addScoreForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const zoneId = document.getElementById('addZoneSelect').value;
+            if (zoneId) {
+                window.location.href = '{{ path('admin_score_list') }}/add/' + zoneId;
+            }
+        });
+    </script>
+
+    {% if searched %}
+        <div class="mb-3">
+            <strong>Search Results:</strong> {{ scores.getTotalItemCount }} score(s) found
+        </div>
+        {% if scores.items|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Zone</th>
+                            <th>Player</th>
+                            <th>Score</th>
+                            <th>Damage</th>
+                            <th>Multi</th>
+                            <th>Car</th>
+                            <th>Strat</th>
+                            <th>Rank</th>
+                            <th>%WR</th>
+                            <th>Stars</th>
+                            <th>Proof</th>
+                            <th>Glitch</th>
+                            <th>PR</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for score in scores %}
+                            <tr>
+                                <td>{{ score.id }}</td>
+                                <td>{{ score.zone.id }} - {{ score.zone.name }}</td>
+                                <td>{{ score.player.name }}</td>
+                                <td>{{ score.score|number_format(0, '.', ',') }}</td>
+                                <td>{{ score.damage ? score.damage|number_format(0, '.', ',') : '-' }}</td>
+                                <td>{{ score.multi ? score.multi|number_format(0, '.', ',') : '-' }}</td>
+                                <td>{{ score.car ? score.car.name : '-' }}</td>
+                                <td>{{ score.strat ? score.strat.name : '-' }}</td>
+                                <td>
+                                    {% if score.chartRank %}
+                                        <span class="badge bg-primary">{{ score.chartRank }}</span>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ score.percentWr ? score.percentWr : '-' }}</td>
+                                <td>{{ score.stars ?? '-' }}</td>
+                                <td>
+                                    {% if score.proofType %}
+                                        {{ score.proofType.value }}
+                                        {% if score.proofLink %}
+                                            <a href="{{ score.proofLink }}" target="_blank" rel="noopener noreferrer">🔗</a>
+                                        {% endif %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ score.glitch ? score.glitch.value : '-' }}</td>
+                                <td>
+                                    {% if score.prEntry %}
+                                        <span class="badge bg-success">Yes</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{{ path('admin_score_edit', {id: score.id}) }}" class="btn btn-warning">
+                                            Edit
+                                        </a>
+                                        <form method="post" action="{{ path('admin_score_delete', {id: score.id}) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this score?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ score.id) }}">
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# Pagination #}
+            <div class="d-flex justify-content-center">
+                {{ knp_pagination_render(scores) }}
+            </div>
+        {% else %}
+            <div class="alert alert-warning">
+                No scores found with the selected filters. Try adjusting your search criteria or leave all filters empty to see all scores.
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info">
+            Click "Search Scores" to display scores. You can filter by player and/or zone, or leave both empty to see all scores.
+        </div>
+    {% endif %}
+{% endblock %}

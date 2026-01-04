@@ -561,4 +561,50 @@ class ScoreRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Find scores with optional filters for admin list
+     *
+     * @param array{player?: Player, zone?: Zone} $filters
+     * @return list<Score>
+     */
+    public function findByFilters(array $filters): array
+    {
+        return $this->findByFiltersQueryBuilder($filters)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get QueryBuilder for scores with optional filters (for pagination)
+     *
+     * @param array{player?: Player, zone?: Zone} $filters
+     */
+    public function findByFiltersQueryBuilder(array $filters): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.player', 'p')
+            ->addSelect('p')
+            ->leftJoin('s.zone', 'z')
+            ->addSelect('z')
+            ->leftJoin('s.car', 'c')
+            ->addSelect('c')
+            ->leftJoin('s.strat', 'st')
+            ->addSelect('st');
+
+        if (isset($filters['player'])) {
+            $qb->andWhere('s.player = :player')
+               ->setParameter('player', $filters['player']);
+        }
+
+        if (isset($filters['zone'])) {
+            $qb->andWhere('s.zone = :zone')
+               ->setParameter('zone', $filters['zone']);
+        }
+
+        $qb->orderBy('z.id', 'ASC')
+           ->addOrderBy('s.score', 'DESC');
+
+        return $qb;
+    }
 }
