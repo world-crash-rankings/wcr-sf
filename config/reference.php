@@ -1477,6 +1477,34 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     convert_exception?: bool|Param, // Default: false
  *     remove_first_page_param?: bool|Param, // Default: false
  * }
+ * @psalm-type FdLogViewerConfig = array{
+ *     home_route?: scalar|null|Param, // The name of the route to redirect to when clicking the back button
+ *     show_performance_details?: scalar|null|Param, // Will toggle if the performance information and version will be shown. Default true // Default: true
+ *     log_files?: array<string, array{ // Default: {"monolog":{"type":"monolog","name":"Monolog","finder":{"in":"%kernel.logs_dir%","name":"*.log","depth":"== 0","ignoreUnreadableDirs":true,"followLinks":false},"downloadable":false,"deletable":false,"start_of_line_pattern":"/^\\[\\d{4}-\\d{2}-\\d{2}[^]]*]\\s+\\S+\\.\\S+:/","log_message_pattern":"/^\\[(?P<date>[^\\]]+)\\]\\s+(?P<channel>[^\\.]+)\\.(?P<severity>[^:]+):\\s+(?P<message>.*)\\s+(?P<context>(?:{.*?}|\\[.*?]))\\s+(?P<extra>(?:{.*?}|\\[.*?]))\\s+$/s","date_format":null}}
+ *         type?: scalar|null|Param, // The type of log file: monolog, nginx, apache, or the service id of an implementation of `LogFileParserInterface`
+ *         name?: scalar|null|Param, // The pretty name to show for these log files
+ *         finder: array{
+ *             in?: scalar|null|Param, // The symfony/finder pattern to iterate through directories. Example: %kernel.logs_dir%
+ *             name?: scalar|null|Param, // The symfony/finder pattern to filter files. Example: *.log // Default: null
+ *             depth?: scalar|null|Param, // The symfony/finder directory depth to search files for. Example: '> 0' // Default: null
+ *             ignoreUnreadableDirs?: scalar|null|Param, // Whether to ignore unreadable directories // Default: true
+ *             followLinks?: scalar|null|Param, // Whether to follow symlinks // Default: false
+ *         },
+ *         downloadable?: scalar|null|Param, // Whether or not to allow downloading of the log file // Default: false
+ *         deletable?: scalar|null|Param, // Whether or not to allow deletion of the log file // Default: false
+ *         start_of_line_pattern?: scalar|null|Param, // The regex pattern for the start of a log line. Adds support for multiline log messages. // Default: null
+ *         log_message_pattern?: scalar|null|Param, // The regex pattern for a full log message which could include newlines. // Default: null
+ *         date_format?: scalar|null|Param, // The date format to parse the date from the log entry. If set to `null`, the format will be guessed by `strtotime` // Default: null
+ *     }>,
+ *     hosts?: array<string, array{ // Default: {"localhost":{"name":"Local","host":null}}
+ *         name?: scalar|null|Param, // The pretty name to show for this host
+ *         host?: scalar|null|Param, // The host to connect to // Default: null
+ *         auth?: array{
+ *             type: scalar|null|Param, // An implementation of AuthenticatorInterface
+ *             options?: array<string, scalar|null|Param>,
+ *         },
+ *     }>,
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1508,21 +1536,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         maker?: MakerConfig,
  *         knp_paginator?: KnpPaginatorConfig,
- *     },
- *     "when@local"?: array{
- *         imports?: ImportsConfig,
- *         parameters?: ParametersConfig,
- *         services?: ServicesConfig,
- *         framework?: FrameworkConfig,
- *         doctrine?: DoctrineConfig,
- *         doctrine_migrations?: DoctrineMigrationsConfig,
- *         twig?: TwigConfig,
- *         stimulus?: StimulusConfig,
- *         turbo?: TurboConfig,
- *         twig_extra?: TwigExtraConfig,
- *         security?: SecurityConfig,
- *         monolog?: MonologConfig,
- *         knp_paginator?: KnpPaginatorConfig,
+ *         fd_log_viewer?: FdLogViewerConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1538,6 +1552,22 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         knp_paginator?: KnpPaginatorConfig,
+ *     },
+ *     "when@staging"?: array{
+ *         imports?: ImportsConfig,
+ *         parameters?: ParametersConfig,
+ *         services?: ServicesConfig,
+ *         framework?: FrameworkConfig,
+ *         doctrine?: DoctrineConfig,
+ *         doctrine_migrations?: DoctrineMigrationsConfig,
+ *         twig?: TwigConfig,
+ *         stimulus?: StimulusConfig,
+ *         turbo?: TurboConfig,
+ *         twig_extra?: TwigExtraConfig,
+ *         security?: SecurityConfig,
+ *         monolog?: MonologConfig,
+ *         knp_paginator?: KnpPaginatorConfig,
+ *         fd_log_viewer?: FdLogViewerConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1635,8 +1665,8 @@ namespace Symfony\Component\Routing\Loader\Configurator;
  * }
  * @psalm-type RoutesConfig = array{
  *     "when@dev"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
- *     "when@local"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@prod"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
+ *     "when@staging"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@test"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     ...<string, RouteConfig|ImportConfig|AliasConfig>
  * }
