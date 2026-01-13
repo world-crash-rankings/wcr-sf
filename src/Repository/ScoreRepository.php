@@ -446,7 +446,7 @@ class ScoreRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
 
         // Build WHERE conditions for subquery
-        $conditions = ['lookup.proof_link IS NOT NULL', "lookup.proof_type IN ('Replay', 'Live')"];
+        $conditions = ['lookup.proof_link IS NOT NULL', "lookup.proof_type IN ('Replay', 'Live')", "lookup.glitch != 'Sink'"];
         $parameters = [];
 
         if (isset($params['platform'])) {
