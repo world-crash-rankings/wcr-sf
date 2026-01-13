@@ -185,7 +185,7 @@
             <div class="card-body">
                 <div class="row text-center">
                     {% for car_name, nb in cars %}
-                        {% set car_image = 'cars/' ~ car_name|lower|replace({' ': ''}) ~ '.png' %}
+                        {% set car_image = 'cars/' ~ car_name|car_image ~ '.png' %}
                         <div class="col-6 col-md-2 mb-3">
                             <img src="{{ asset('img/' ~ car_image) }}" alt="{{ car_name }}" title="{{ car_name }}" height="48" class="d-block mx-auto mb-2">
                             <div class="fs-5">{{ nb }}</div>
