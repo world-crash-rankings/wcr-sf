@@ -1519,6 +1519,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     security?: SecurityConfig,
  *     monolog?: MonologConfig,
  *     knp_paginator?: KnpPaginatorConfig,
+ *     fd_log_viewer?: FdLogViewerConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1552,6 +1553,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         knp_paginator?: KnpPaginatorConfig,
+ *         fd_log_viewer?: FdLogViewerConfig,
  *     },
  *     "when@staging"?: array{
  *         imports?: ImportsConfig,
@@ -1584,6 +1586,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         knp_paginator?: KnpPaginatorConfig,
+ *         fd_log_viewer?: FdLogViewerConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
