@@ -4,6 +4,8 @@
     <td class="text-center">
         {% if rank is not same as('-') and rank <= 3 and show_rank_badge %}
             <img src="{{ asset('img/medals/' ~ rank ~ '.png') }}" alt="Rank {{ rank }}" width="32" height="32">
+        {% elseif rank is not same as('-') and rank > 25 %}
+            <span class="h5">-</span>
         {% else %}
             <span class="h5">{{ rank }}</span>
         {% endif %}
@@ -106,6 +108,8 @@
     <td class="text-center">
         {% if rank is not same as('-') and rank <= 3 and show_rank_badge %}
             <img src="{{ asset('img/medals/' ~ rank ~ '.png') }}" alt="Rank {{ rank }}" width="32" height="32">
+        {% elseif rank is not same as('-') and rank > 25 %}
+            <span class="h5">-</span>
         {% else %}
             <span class="h5">{{ rank }}</span>
         {% endif %}
@@ -196,6 +200,8 @@
     <td class="text-center">
         {% if rank is not same as('-') and rank <= 3 and show_rank_badge %}
             <img src="{{ asset('img/medals/' ~ rank ~ '.png') }}" alt="Rank {{ rank }}" width="32" height="32">
+        {% elseif rank is not same as('-') and rank > 25 %}
+            <span class="h5">-</span>
         {% else %}
             <span class="h5">{{ rank }}</span>
         {% endif %}
