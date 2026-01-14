@@ -52,39 +52,46 @@
         {% if nationalRecords is empty %}
             <p class="text-muted">No national records found for {{ country.name }}.</p>
         {% else %}
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-sm">
                 <tbody>
                     {% for score in nationalRecords %}
                     <tr>
                         {# Zone name #}
-                        <td style="width: 180px;">
+                        <td>
                             <a href="{{ path('zone', {'id': score.zone.id}) }}" class="text-decoration-none fw-bold">
-                                {{ score.zone.name }}
+                                <span class="d-none d-md-inline">{{ score.zone.name }}</span>
+                                <span class="d-md-none" style="font-size: 0.9rem;">{{ score.zone.name }}</span>
                             </a>
                         </td>
 
                         {# Rank with medal #}
-                        <td class="text-center" style="width: 60px;">
+                        <td class="text-center" style="width: 50px;">
                             {% if score.chartRank <= 3 %}
-                                <img src="{{ asset('img/medals/' ~ score.chartRank ~ '.png') }}" alt="Rank {{ score.chartRank }}" width="32" height="32">
+                                <img src="{{ asset('img/medals/' ~ score.chartRank ~ '.png') }}" alt="Rank {{ score.chartRank }}" width="24" height="24" class="d-md-none">
+                                <img src="{{ asset('img/medals/' ~ score.chartRank ~ '.png') }}" alt="Rank {{ score.chartRank }}" width="32" height="32" class="d-none d-md-inline">
                             {% else %}
-                                <span class="h5">{{ score.chartRank }}</span>
+                                <span class="d-md-none">{{ score.chartRank }}</span>
+                                <span class="h5 d-none d-md-inline">{{ score.chartRank }}</span>
                             {% endif %}
                         </td>
 
                         {# Score value #}
-                        <td class="text-end"><strong>{{ score.score|number_format(0, '.', ',') }}</strong></td>
+                        <td class="text-end">
+                            <strong class="d-none d-sm-inline">{{ score.score|number_format(0, '.', ',') }}</strong>
+                            <strong class="d-sm-none">{{ (score.score / 1000)|number_format(0) }}k</strong>
+                        </td>
 
-                        {# Car #}
-                        <td class="text-center">
+                        {# Car - Hidden on medium and smaller screens #}
+                        <td class="text-center d-none d-lg-table-cell" style="width: 60px;">
                             {% if score.car %}
                                 <img src="{{ asset('img/cars/' ~ score.car.name|car_image ~ '.png') }}" alt="{{ score.car.name }}" title="{{ score.car.name }}" width="40" height="20">
                             {% endif %}
                         </td>
 
                         {# Country flag #}
-                        <td class="text-center">
-                            <img src="{{ asset('img/flags/32/' ~ score.player.country.iso ~ '.png') }}" alt="{{ score.player.country.name }}" title="{{ score.player.country.name }}" width="32" height="24">
+                        <td class="text-center" style="width: 50px;">
+                            <img src="{{ asset('img/flags/32/' ~ score.player.country.iso ~ '.png') }}" alt="{{ score.player.country.name }}" title="{{ score.player.country.name }}" width="24" height="18" class="d-md-none">
+                            <img src="{{ asset('img/flags/32/' ~ score.player.country.iso ~ '.png') }}" alt="{{ score.player.country.name }}" title="{{ score.player.country.name }}" width="32" height="24" class="d-none d-md-inline">
                         </td>
 
                         {# Player name #}
@@ -94,15 +101,15 @@
                             </a>
                         </td>
 
-                        {# Platform #}
-                        <td class="text-center">
+                        {# Platform - Hidden on large and smaller screens #}
+                        <td class="text-center d-none d-xl-table-cell" style="width: 50px;">
                             {% if score.platform %}
                                 <img src="{{ asset('img/logos/' ~ score.platform.value|lower ~ '.png') }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
                             {% endif %}
                         </td>
 
-                        {# Frequency/Version #}
-                        <td class="text-center">
+                        {# Frequency/Version - Hidden on large and smaller screens #}
+                        <td class="text-center d-none d-xl-table-cell" style="width: 60px;">
                             {% if score.freq and score.version %}
                                 <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
                             {% elseif score.freq %}
@@ -112,8 +119,8 @@
                             {% endif %}
                         </td>
 
-                        {# Stars #}
-                        <td class="text-center">
+                        {# Stars - Hidden on medium and smaller screens #}
+                        <td class="text-center d-none d-lg-table-cell">
                             {% if score.stars %}
                                 {% for i in 1..10 %}
                                     {% if i <= score.stars %}
@@ -125,29 +132,36 @@
                             {% endif %}
                         </td>
 
-                        {# Percent WR #}
-                        <td class="text-center">
+                        {# Percent WR - Hidden on small screens #}
+                        <td class="text-center d-none d-md-table-cell">
                             {% if score.percentWr %}
                                 <span class="badge bg-success">{{ score.percentWr }}%</span>
                             {% endif %}
                         </td>
 
                         {# Proof #}
-                        <td class="text-center">
+                        <td class="text-center" style="width: 50px;">
                             {% if score.proofType %}
                                 {% if score.proofLink %}
                                     <a href="{{ score.proofLink }}" target="_blank">
-                                        <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="24" height="24">
+                                        <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="20" height="20" class="d-md-none">
+                                        <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="24" height="24" class="d-none d-md-inline">
                                     </a>
                                 {% else %}
-                                    <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="24" height="24">
+                                    <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="20" height="20" class="d-md-none">
+                                    <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}" alt="{{ score.proofType.value }}" title="{{ score.proofType.value }}" width="24" height="24" class="d-none d-md-inline">
                                 {% endif %}
                             {% endif %}
                         </td>
 
-                        {# Date #}
-                        <td class="text-end text-muted">
-                            {{ score.realisation ? score.realisation|date('F j, Y') : (score.registration|date('F j, Y')) }}
+                        {# Date - Hidden on small screens #}
+                        <td class="text-end text-muted d-none d-sm-table-cell">
+                            <span class="d-none d-lg-inline">
+                                {{ score.realisation ? score.realisation|date('F j, Y') : (score.registration|date('F j, Y')) }}
+                            </span>
+                            <span class="d-lg-none" style="font-size: 0.85rem;">
+                                {{ score.realisation ? score.realisation|date('m/y') : (score.registration|date('m/y')) }}
+                            </span>
                         </td>
                     </tr>
                     {% endfor %}
@@ -164,8 +178,8 @@
         {% if players is empty %}
             <p class="text-muted">No players found for {{ country.name }}.</p>
         {% else %}
-            <table class="table table-striped table-hover">
-                <thead>
+            <table class="table table-striped table-hover table-sm">
+                <thead class="d-none d-sm-table-header-group">
                     <tr>
                         <th class="text-center" style="width: 80px;">National Rank</th>
                         <th>Player</th>
@@ -186,12 +200,14 @@
                         {% set previousRank = player.avgPosRank %}
 
                         <tr>
-                            <td class="text-center">
+                            <td class="text-center" style="width: 60px;">
                                 {% set nationalRank = i - tie %}
                                 {% if nationalRank <= 3 %}
-                                    <img src="{{ asset('img/medals/' ~ nationalRank ~ '.png') }}" alt="Rank {{ nationalRank }}" width="32" height="32">
+                                    <img src="{{ asset('img/medals/' ~ nationalRank ~ '.png') }}" alt="Rank {{ nationalRank }}" width="24" height="24" class="d-sm-none">
+                                    <img src="{{ asset('img/medals/' ~ nationalRank ~ '.png') }}" alt="Rank {{ nationalRank }}" width="32" height="32" class="d-none d-sm-inline">
                                 {% else %}
-                                    <span class="h5">{{ nationalRank }}</span>
+                                    <span class="d-sm-none">{{ nationalRank }}</span>
+                                    <span class="h5 d-none d-sm-inline">{{ nationalRank }}</span>
                                 {% endif %}
                             </td>
                             <td>
@@ -200,7 +216,8 @@
                                 </a>
                             </td>
                             <td class="text-end">
-                                <span class="badge bg-secondary">WCR #{{ player.avgPosRank }}</span>
+                                <span class="badge bg-secondary d-none d-sm-inline">WCR #{{ player.avgPosRank }}</span>
+                                <span class="badge bg-secondary d-sm-none" style="font-size: 0.75rem;">#{{ player.avgPosRank }}</span>
                             </td>
                         </tr>
                     {% endfor %}
