@@ -1,12 +1,24 @@
 {% macro header(zone, active_tab) %}
-{# Zone Navigation - buttons 1-30 #}
-<div class="mb-3">
+{# Zone Navigation - buttons 1-30 (Desktop) #}
+<div class="mb-3 d-none d-md-block">
     <div class="btn-group w-100" role="group">
         {% for i in 1..30 %}
             {% set route = active_tab == 'scores' ? 'zone' : (active_tab == 'info' ? 'zone_info' : (active_tab == 'strats' ? 'zone_strats' : 'zone_videos')) %}
             <a href="{{ path(route, {id: i}) }}" class="btn btn-{{ i == zone.id ? 'warning' : 'primary' }}">{{ i }}</a>
         {% endfor %}
     </div>
+</div>
+
+{# Zone Navigation - select (Mobile) #}
+<div class="mb-3 d-md-none">
+    {% set route = active_tab == 'scores' ? 'zone' : (active_tab == 'info' ? 'zone_info' : (active_tab == 'strats' ? 'zone_strats' : 'zone_videos')) %}
+    <select class="form-select form-select-lg" onchange="window.location.href=this.value">
+        {% for i in 1..30 %}
+            <option value="{{ path(route, {id: i}) }}" {{ i == zone.id ? 'selected' : '' }}>
+                Zone {{ i }}
+            </option>
+        {% endfor %}
+    </select>
 </div>
 
 {# Zone Header #}
