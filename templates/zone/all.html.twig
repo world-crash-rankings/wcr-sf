@@ -34,45 +34,57 @@
 {% block body %}
 <h1>Zones</h1>
 
-<table class="table table-hover">
-    <tbody>
-        {% for zone in zones %}
-        <tr>
-            {# Zone number and name #}
-            <td style="width: 300px;">
-                <a href="{{ path('zone', {id: zone.id}) }}">{{ zone.id }} - {{ zone.name }}</a>
-            </td>
-
-            {# Platform logos #}
-            <td class="text-center" style="width: 150px;">
-                <img src="{{ asset('img/logos/xbox.png') }}" alt="Xbox" width="32" height="32" class="me-1">
-                <img src="{{ asset('img/logos/gc.png') }}" alt="GameCube" width="32" height="32" class="me-1">
-                <img src="{{ asset('img/logos/ps2.png') }}" alt="PS2" width="32" height="32">
-            </td>
-
-            {# World Record info #}
-            {% if wrs[zone.id] is defined %}
-                {% set wr = wrs[zone.id] %}
-
-                {# Country flag #}
-                <td class="text-center" style="width: 80px;">
-                    <img src="{{ asset('img/flags/32/' ~ wr.player.country.iso ~ '.png') }}" alt="{{ wr.player.country.name }}" title="{{ wr.player.country.name }}" width="32" height="24">
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tbody>
+            {% for zone in zones %}
+            <tr>
+                {# Zone number and name - Short on mobile, full on desktop #}
+                <td>
+                    <a href="{{ path('zone', {id: zone.id}) }}">
+                        <span class="d-none d-sm-inline">{{ zone.id }} - {{ zone.name }}</span>
+                        <span class="d-sm-none">Z{{ zone.id }}</span>
+                    </a>
                 </td>
 
-                {# Player name #}
-                <td style="width: 200px;">
-                    <span class="text-primary">{{ wr.player.name }}</span>
+                {# Platform logos - Hidden on mobile #}
+                <td class="text-center d-none d-sm-table-cell">
+                    <img src="{{ asset('img/logos/xbox.png') }}" alt="Xbox" width="32" height="32" class="me-1">
+                    <img src="{{ asset('img/logos/gc.png') }}" alt="GameCube" width="32" height="32" class="me-1">
+                    <img src="{{ asset('img/logos/ps2.png') }}" alt="PS2" width="32" height="32">
                 </td>
 
-                {# WR Score #}
-                <td class="text-end" style="width: 200px;">
-                    <strong>${{ wr.score|number_format(0, '.', ',') }}</strong>
-                </td>
-            {% else %}
-                <td colspan="3"></td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                {# World Record info #}
+                {% if wrs[zone.id] is defined %}
+                    {% set wr = wrs[zone.id] %}
+
+                    {# Country flag - Smaller on mobile #}
+                    <td class="text-center">
+                        <img src="{{ asset('img/flags/32/' ~ wr.player.country.iso ~ '.png') }}"
+                             alt="{{ wr.player.country.name }}"
+                             title="{{ wr.player.country.name }}"
+                             width="24" height="18" class="d-sm-none">
+                        <img src="{{ asset('img/flags/32/' ~ wr.player.country.iso ~ '.png') }}"
+                             alt="{{ wr.player.country.name }}"
+                             title="{{ wr.player.country.name }}"
+                             width="32" height="24" class="d-none d-sm-inline">
+                    </td>
+
+                    {# Player name #}
+                    <td>
+                        <span class="text-primary">{{ wr.player.name }}</span>
+                    </td>
+
+                    {# WR Score #}
+                    <td class="text-end">
+                        <strong>${{ wr.score|number_format(0, '.', ',') }}</strong>
+                    </td>
+                {% else %}
+                    <td colspan="3"></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
