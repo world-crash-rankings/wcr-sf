@@ -62,7 +62,7 @@ steps:
       - ssh-add ~/.ssh/id_ed25519
       - cp public/robots.production.txt public/robots.txt
       - rsync -rav --quiet --delete -e "ssh -p $PRODUCTION_SSH_PORT" --exclude='.env.local' --exclude='var' ./ $PRODUCTION_SSH_USER@$PRODUCTION_SSH_HOST:$PRODUCTION_PATH/
-      - ssh -p $PRODUCTION_SSH_PORT $PRODUCTION_SSH_USER@$PRODUCTION_SSH_HOST "cd $PRODUCTION_PATH && bin/console cache:clear && bin/console app:generate-sitemap"
+      - ssh -p $PRODUCTION_SSH_PORT $PRODUCTION_SSH_USER@$PRODUCTION_SSH_HOST "cd $PRODUCTION_PATH && bin/console cache:clear && bin/console debug:asset-map && bin/console app:generate-sitemap"
     environment:
       SSH_PRIVATE_KEY:
         from_secret: production_ssh_key
