@@ -156,6 +156,14 @@
                             Scores
                         </a>
                     </li>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if app.request.attributes.get('_route') starts with 'admin_user' %}active{% endif %}"
+                               href="{{ path('admin_user_list') }}">
+                                Users
+                            </a>
+                        </li>
+                    {% endif %}
                     {# Add more admin sections here #}
                 </ul>
             </div>

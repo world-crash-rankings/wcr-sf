@@ -47,4 +47,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * Get QueryBuilder for all users ordered by username (for admin pagination).
+     */
+    public function findAllOrderedByUsernameQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.username', 'ASC');
+    }
 }
