@@ -1,0 +1,52 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ is_edit ? 'Edit User' : 'Add User' }} - {{ parent() }}{% endblock %}
+
+{% block admin_content %}
+    <div class="mb-4">
+        <h2>{{ is_edit ? 'Edit User' : 'Add User' }}</h2>
+    </div>
+
+    {{ form_start(form, {'attr': {'class': 'needs-validation', 'data-turbo': 'false'}}) }}
+        <div class="mb-3">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.email) }}
+            <div class="form-text">This will be the user's login identifier.</div>
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.username) }}
+            <div class="form-text">Display name for the user.</div>
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.plainPassword) }}
+            {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'autocomplete': 'new-password'}}) }}
+            {{ form_errors(form.plainPassword) }}
+            {% if is_edit %}
+                <div class="form-text">Leave blank to keep current password. Minimum 6 characters if changing.</div>
+            {% else %}
+                <div class="form-text">Minimum 6 characters.</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.userRole) }}
+            {{ form_widget(form.userRole) }}
+            {{ form_errors(form.userRole) }}
+            <div class="form-text">Select the user's role level.</div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                {{ is_edit ? 'Update User' : 'Add User' }}
+            </button>
+            <a href="{{ path('admin_user_list') }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
