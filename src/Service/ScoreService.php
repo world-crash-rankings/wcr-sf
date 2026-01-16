@@ -36,6 +36,8 @@ class ScoreService
         // Check if this is a personal record
         if ($this->isPersonalRecord($score)) {
             $this->handlePersonalRecord($score);
+            // Flush to ensure the personal record is persisted before statistics calculation
+            $this->entityManager->flush();
         }
 
         // Recalculate player rankings
