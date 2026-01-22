@@ -1,0 +1,71 @@
+# Variables d'environnement et secrets
+.env
+.env.local
+.env.*.local
+*.env.local
+.env.prod
+.env.dev
+.env.test
+config/secrets/
+config/jwt/
+
+# Fichiers de cache et logs
+var/cache/
+var/log/
+var/sessions/
+
+# Dépendances
+vendor/
+node_modules/
+
+# Git
+.git/
+
+# Certificats et clés
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.csr
+id_rsa
+id_rsa.pub
+*.ssh/
+
+# Fichiers de lock et configuration IDE
+composer.lock
+package-lock.json
+yarn.lock
+.idea/
+.vscode/
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Tests et couverture
+coverage/
+.nyc_output/
+.phpunit.result.cache
+
+# Base de données
+*.sql
+*.dump
+backup/
+dumps/
+migrations/
+
+# Fixtures de test
+src/DataFixtures/
+tests/fixtures/
+
+# Configuration Docker
+docker-compose.override.yml
+docker-compose.prod.yml
+.dockerignore
