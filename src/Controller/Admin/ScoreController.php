@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Score;
 use App\Entity\Zone;
+use App\Event\ScoreAdded;
 use App\Form\ScoreSearchType;
 use App\Form\ScoreType;
 use App\Repository\ScoreRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[Route('/admin/scores')]
 #[IsGranted('ROLE_ADMIN')]
@@ -25,6 +27,7 @@ class ScoreController extends AbstractController
 {
     public function __construct(
         private readonly ScoreService $scoreService,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -108,6 +111,7 @@ class ScoreController extends AbstractController
                 try {
                     $this->scoreService->addScore($score);
                     $this->addFlash('success', 'Score added successfully.');
+                    $this->eventDispatcher->dispatch(new ScoreAdded($score));
                     return $this->redirectToRoute('admin_score_list');
                 } catch (\Exception $e) {
                     $this->addFlash('error', 'Error adding score: ' . $e->getMessage());
