@@ -4,9 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-World Crash Rankings (WCR) - Symfony 8.0 version. This is a **migration project** from a legacy Zend Framework 2 application located at `../wcr-zf2`. The application manages crash mode rankings, players, scores, and related statistics.
-
-**Migration Status**: Early stage - basic Symfony 8.0 skeleton is initialized, legacy ZF2 modules need to be migrated progressively.
+World Crash Rankings (WCR) - A Symfony 8.0 web application that manages Burnout 3: Takedown crash mode rankings, players, scores, and related statistics. The application tracks world records, player rankings across multiple metrics (total, average position, average percent, average stars), and provides a full admin panel for data management.
 
 ## Development Commands
 
@@ -60,7 +58,7 @@ Run `make` or `make help` to see all available commands.
 - **Framework**: Symfony 8.0
 - **PHP**: 8.4+
 - **ORM**: Doctrine ORM 3.6
-- **Database**: MySQL (same as ZF2 version)
+- **Database**: MySQL
 - **Template Engine**: Twig
 - **Asset Management**: Asset Mapper (not Webpack Encore)
 - **Frontend**: Symfony UX (Turbo, Stimulus)
@@ -76,20 +74,29 @@ Run `make` or `make help` to see all available commands.
 ### Directory Structure
 ```
 src/
-├── Controller/     # HTTP controllers
-├── Entity/         # Doctrine entities
-├── Repository/     # Doctrine repositories
-└── Kernel.php      # Application kernel
+├── Command/          # Console commands (create-user, generate-sitemap)
+├── Controller/       # HTTP controllers (public + Admin/)
+├── DataFixtures/     # Doctrine fixtures
+├── Entity/           # Doctrine entities (Player, Score, Zone, Country, etc.)
+├── Enum/             # PHP enums (Platform, ProofType, GlitchType, etc.)
+├── Event/            # Custom event classes
+├── EventSubscriber/  # Event subscribers (Discord notifications)
+├── Form/             # Symfony form types
+├── Repository/       # Doctrine repositories with custom queries
+├── Security/         # Custom user provider
+├── Service/          # Business logic (ScoreService)
+├── Twig/             # Custom Twig extensions
+└── Kernel.php        # Application kernel
 
 config/
-├── packages/       # Bundle configurations
-├── routes/         # Routing configurations
-└── services.yaml   # Service container configuration
+├── packages/         # Bundle configurations
+├── routes/           # Routing configurations
+└── services.yaml     # Service container configuration
 
-migrations/         # Doctrine migrations
-tests/              # PHPUnit tests
-templates/          # Twig templates
-public/             # Web-accessible files
+migrations/           # Doctrine migrations
+tests/                # PHPUnit tests
+templates/            # Twig templates (public + admin/)
+public/               # Web-accessible files
 ```
 
 ### Dependency Injection
@@ -97,44 +104,36 @@ public/             # Web-accessible files
 - All classes in `src/` are automatically registered as services
 - Service IDs are fully-qualified class names
 
-## Migration from ZF2
+## Key Business Logic
 
-### Legacy Application Structure
-The ZF2 version (`../wcr-zf2`) has these modules that need migration:
-- **Application**: Core (ACL, maintenance mode, routing)
-- **Player**: Player management, profiles, comparisons, statistics
-- **Score**: Score tracking and management
-- **Ranking**: Ranking calculations and displays
-- **Country**: Country/zone management
-- **Zone**: Geographic zone handling
-- **News**: News content management
-- **Vids**: Video content management
-- **Admin**: Administrative functionality
-- **Log**: Application logging
+### ScoreService (`src/Service/ScoreService.php`)
+Central service handling all ranking calculations. When a score is added, updated, or deleted:
+- **percent_wr**: Score as percentage of world record
+- **stars**: Based on zone-specific thresholds
+- **chart_rank / best_rank**: Position tracking in zone rankings
+- **Personal records (pr_entry)**: Auto-flagged
+- **Player statistics**: total, avg_pos, avg_percent, avg_stars recalculated
+- **Player ranks**: total_rank, avg_pos_rank, avg_percent_rank, avg_stars_rank updated
+- **Non-rankable glitches**: Freeze and Sink glitch types are excluded from personal records and rankings
 
-### Key ZF2 Features to Migrate
+### Entities
+- **Player**: Profiles with computed statistics and rankings
+- **Score**: Individual crash scores with platform, proof type, glitch type metadata
+- **Zone**: Crash zones/maps with star thresholds and strategies
+- **Country**: Player nationalities with country-level rankings
+- **Car / Strat**: Vehicles and strategies linked to zones
+- **Star**: Zone-specific star threshold scoring
+- **News**: Site announcements with rich text
+- **User**: Admin authentication (ROLE_ADMIN, ROLE_SUPER_ADMIN)
 
-**ACL System** (ZF2: `module/Application/Module.php:68-106`):
-- Role-based access control with `guest` and `admin` roles
-- Currently route-based, needs conversion to Symfony Security voters/attributes
-- Admin status stored in session
+### Enums
+- **Platform**: GC, Xbox, PS2
+- **ProofType**: Pic, XBL, Replay, Live, Freeze
+- **GlitchType**: None, Glitch, Sink, Freeze
+- **Frequency** / **Version**: Additional score metadata
 
-**Database Stored Procedures** (`../wcr-zf2/routines.sql`):
-- MySQL stored procedures for ranking calculations (`avg_percent`, `avg_pos`)
-- These will need to be preserved and potentially wrapped in Doctrine custom functions
-
-**Maintenance Mode** (ZF2: controlled via config):
-- Returns HTTP 503 with static HTML when enabled
-- Should be migrated to Symfony event listener or middleware
-
-### Migration Strategy
-When migrating a ZF2 module to Symfony:
-1. **Entities**: ZF2 models → Doctrine entities in `src/Entity/`
-2. **Controllers**: ZF2 controllers → Symfony controllers in `src/Controller/`
-3. **Routes**: ZF2 `module.config.php` routes → `config/routes.yaml` or annotations
-4. **Forms**: ZF2 forms → Symfony Form components in `src/Form/`
-5. **Views**: ZF2 `.phtml` → Twig templates in `templates/`
-6. **Services**: ZF2 service manager → Symfony DI container autowiring
+### Notifications
+- Discord notifications sent on new scores via Symfony Notifier (ScoreDiscordSubscriber)
 
 ## Git Workflow
 
@@ -149,6 +148,6 @@ When migrating a ZF2 module to Symfony:
 - **Generated Files**: `config/preload.php` and `config/reference.php` are auto-generated by Symfony and excluded from PHPCS
 - **Strict Types**: All new PHP files must include `declare(strict_types=1);`
 - **No Docker**: This project runs without Docker (unlike some Symfony projects)
-- **Legacy Reference**: Always refer to `../wcr-zf2/CLAUDE.md` for understanding the original business logic
-- **Database Compatibility**: Must maintain compatibility with existing MySQL database structure and stored procedures
 - **Turbo Forms**: Add `data-turbo="false"` to forms that have issues with Symfony UX Turbo intercepting submissions
+- **Pagination**: Uses KNP Paginator for all paginated lists
+- **SEO**: Full meta tags (OG, Twitter, canonical), JSON-LD structured data, sitemap generation command

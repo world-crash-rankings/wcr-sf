@@ -1,6 +1,6 @@
-# World Crash Rankings - Symfony
+# World Crash Rankings
 
-Version Symfony 8.0 du projet World Crash Rankings.
+Web application for managing **Burnout 3: Takedown** crash mode rankings, players, scores, and statistics.
 
 Develop
 -------
@@ -8,66 +8,97 @@ Develop
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/badges/quality-score.png?b=dev)](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/?branch=develop)
 [![Build Status](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/badges/build.png?b=dev)]()
 
-
-## Contexte
-
-Ce projet est une migration de l'ancienne version développée en **Zend Framework 2**, située dans `../wcr-zf2`.
-
-L'objectif est de moderniser l'application en utilisant Symfony 8.0 avec les technologies actuelles.
-
-## Stack technique
+## Tech Stack
 
 - **Framework**: Symfony 8.0
-- **PHP**: 8.x
-- **ORM**: Doctrine
-- **Qualité de code**: PHPStan (niveau 8), PHP CodeSniffer (PSR-12)
+- **PHP**: 8.4+
+- **ORM**: Doctrine ORM 3.6
+- **Database**: MySQL
+- **Template Engine**: Twig
+- **Asset Management**: Asset Mapper
+- **Frontend**: Bootstrap 5, Symfony UX (Turbo, Stimulus)
+- **Code Quality**: PHPStan (level 8), PHP CodeSniffer (PSR-12)
+
+## Features
+
+### Rankings
+- 4 ranking types: Total, Average Position, Stars, Percent
+- Dynamic rank calculations updated on every score change
+- Country-specific rankings
+
+### Players
+- Player profiles with detailed statistics
+- Personal records tracking
+- Platform and proof type statistics
+- Player vs player comparison tool
+
+### Scores
+- Score entry with platform (GC/Xbox/PS2), proof type, glitch type
+- World record and personal record auto-detection
+- Rank history tracking (chart rank, best rank)
+
+### Zones
+- Zone descriptions and top scores
+- Strategy management per zone
+- Video gallery per zone
+- Star threshold scoring system
+
+### Admin Panel
+- Full CRUD for all entities (Players, Scores, Zones, Countries, Strategies, News, Users)
+- Score filtering and search
+- Role-based access (ROLE_ADMIN, ROLE_SUPER_ADMIN)
+
+### Notifications
+- Discord notifications on new scores via Symfony Notifier
 
 ## Installation
 
 ```bash
-# Installer les dépendances
+# Install dependencies
 make install
 
-# Créer la base de données
+# Create database
 make db-create
 
-# Exécuter les migrations
+# Run migrations
 make db-migrate
+
+# Load fixtures (optional)
+make db-fixtures
+
+# Create an admin user
+php bin/console app:create-user
 ```
 
-## Commandes utiles
+## Useful Commands
 
-### Qualité de code
+### Code Quality
 ```bash
-make phpcs         # Vérifier le style de code
-make phpcs-fix     # Corriger automatiquement les erreurs
-make phpstan       # Analyse statique
-make qa            # Lance phpcs + phpstan
+make phpcs         # Check code style (PSR-12)
+make phpcs-fix     # Auto-fix code style issues
+make phpstan       # Static analysis (level 8)
+make qa            # Run phpcs + phpstan
 ```
 
-### Base de données
+### Database
 ```bash
-make db-create     # Créer la BDD
-make db-migrate    # Exécuter les migrations
-make db-fixtures   # Charger les fixtures
-make db-reset      # Réinitialiser complètement la BDD
+make db-create     # Create database
+make db-migrate    # Run migrations
+make db-fixtures   # Load fixtures
+make db-reset      # Full reset (drop, recreate, migrate, fixtures)
 ```
 
 ### Tests
 ```bash
-make test          # Lancer les tests
-make test-coverage # Tests avec couverture de code
+make test          # Run tests
+make test-coverage # Run tests with code coverage
 ```
 
-### Serveur de développement
+### Development Server
 ```bash
-make serve         # Démarrer le serveur Symfony
-make serve-stop    # Arrêter le serveur
-make serve-log     # Afficher les logs
+make serve         # Start Symfony dev server
+make serve-stop    # Stop server
+make serve-log     # View server logs
 ```
 
-Tapez `make` ou `make help` pour voir toutes les commandes disponibles.
-
-## Migration depuis ZF2
-
-L'ancienne version ZF2 se trouve dans `../wcr-zf2`. Les fonctionnalités sont migrées progressivement vers cette version Symfony.
+Run `make` or `make help` to see all available commands.
