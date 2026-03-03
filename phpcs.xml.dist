@@ -30,7 +30,9 @@
     <exclude-pattern>tests/bootstrap.php</exclude-pattern>
 
     <!-- Use PSR-12 coding standard -->
-    <rule ref="PSR12"/>
+    <rule ref="PSR12">
+        <exclude name="Generic.Files.LineLength"/>
+    </rule>
 
     <!-- Additional rules -->
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
