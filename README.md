@@ -1,12 +1,12 @@
 # World Crash Rankings
 
-Web application for managing **Burnout 3: Takedown** crash mode rankings, players, scores, and statistics.
+Web application for managing **Burnout 2** crash mode rankings, players, scores, and statistics.
 
-Develop
--------
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/badges/quality-score.png?b=dev)](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/?branch=develop)
-[![Build Status](https://scrutinizer-ci.com/g/world-crash-rankings/wcr-sf/badges/build.png?b=dev)]()
+[![CI](https://github.com/world-crash-rankings/wcr-sf/actions/workflows/quality.yml/badge.svg?branch=dev)](https://github.com/world-crash-rankings/wcr-sf/actions/workflows/quality.yml)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen)](https://phpstan.org)
+[![PHPCS](https://img.shields.io/badge/code%20style-PSR--12-blue)](https://www.php-fig.org/psr/psr-12)
+[![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=white)](https://www.php.net)
+[![Symfony](https://img.shields.io/badge/Symfony-8.0-000000?logo=symfony&logoColor=white)](https://symfony.com)
 
 ## Tech Stack
 
