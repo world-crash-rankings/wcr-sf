@@ -181,6 +181,16 @@
             <div class="push"></div>
         </div>
 
+        <script>
+            function initTooltips() {
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+                    new bootstrap.Tooltip(el);
+                });
+            }
+            document.addEventListener('DOMContentLoaded', initTooltips);
+            document.addEventListener('turbo:load', initTooltips);
+        </script>
+
         <footer class="footer">
             <div class="container text-center">
                 <p class="text-muted">World Crash Rankings &copy; 2014 - {{ 'now'|date('Y') }}</p>

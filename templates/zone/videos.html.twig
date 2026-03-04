@@ -164,8 +164,8 @@
                 {# Rank #}
                 <td class="text-center" style="width: 50px;"><strong>{{ loop.index }}</strong></td>
 
-                {# Score #}
-                <td class="text-end" style="min-width: 100px;"><strong>{{ score.score|number_format(0, '.', ',') }}</strong></td>
+                {# Damage #}
+                <td class="text-end" style="min-width: 100px;"><strong>{{ score.damage ? score.damage|number_format(0, '.', ',') : '-' }}</strong></td>
 
                 {# Car image - hidden on mobile #}
                 <td class="text-center d-none d-md-table-cell" style="width: 60px;">

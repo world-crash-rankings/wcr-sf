@@ -14,7 +14,15 @@
 
     {# Score #}
     <td class="text-end">
-        <strong>${{ score.score|number_format(0, '.', ',') }}</strong>
+        {% if score.damage or score.multi %}
+            {% set tooltipParts = [] %}
+            {% if score.damage %}{% set tooltipParts = tooltipParts|merge(['Damage: $' ~ score.damage|number_format(0, '.', ',')]) %}{% endif %}
+            {% if score.multi %}{% set tooltipParts = tooltipParts|merge(['Multi: x' ~ score.multi|number_format(0, '.', ',')]) %}{% endif %}
+            {% set tooltipParts = tooltipParts|merge(['Score: $' ~ score.score|number_format(0, '.', ',')]) %}
+            <strong data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ tooltipParts|join('<br>') }}" style="cursor: help;">${{ score.score|number_format(0, '.', ',') }}</strong>
+        {% else %}
+            <strong>${{ score.score|number_format(0, '.', ',') }}</strong>
+        {% endif %}
     </td>
 
     {# Car image - Hidden on mobile #}
@@ -199,7 +207,7 @@
 </tr>
 {% endmacro %}
 
-{% macro video_score_row(rank, score, show_rank_badge = true) %}
+{% macro video_score_row(rank, score, show_rank_badge = true, show_damage = false) %}
 <tr>
     {# Zone name (link) #}
     <td>
@@ -221,9 +229,13 @@
         {% endif %}
     </td>
 
-    {# Score #}
+    {# Score or Damage #}
     <td class="text-end">
-        <strong>${{ score.score|number_format(0, '.', ',') }}</strong>
+        {% if show_damage %}
+            <strong>{{ score.damage ? score.damage|number_format(0, '.', ',') : '-' }}</strong>
+        {% else %}
+            <strong>${{ score.score|number_format(0, '.', ',') }}</strong>
+        {% endif %}
     </td>
 
     {# Car image - Hidden on mobile #}
