@@ -25,7 +25,8 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function findPersonalRecords(Player $player): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->leftJoin('s.zone', 'z')
             ->addSelect('z')
             ->leftJoin('s.car', 'c')
@@ -37,6 +38,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('z.id', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -44,13 +47,16 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function findByZoneRanked(Zone $zone): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->where('s.zone = :zone')
             ->andWhere('s.chartRank IS NOT NULL')
             ->orderBy('s.chartRank', 'ASC')
             ->setParameter('zone', $zone)
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -68,6 +74,7 @@ class ScoreRepository extends ServiceEntityRepository
             ->where('s.chartRank = 1')
             ->orderBy('s.zone', 'ASC');
 
+        /** @var Score[] $scores */
         $scores = $qb->getQuery()->getResult();
 
         // Index by zone ID for easy access
@@ -86,7 +93,8 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function getTopScores(Zone $zone, int $limit = 25): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -100,6 +108,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -130,7 +140,10 @@ class ScoreRepository extends ServiceEntityRepository
         $qb->orderBy('s.score', 'DESC')
             ->setMaxResults($limit);
 
-        return $qb->getQuery()->getResult();
+        /** @var list<Score> $result */
+        $result = $qb->getQuery()->getResult();
+
+        return $result;
     }
 
     /**
@@ -140,7 +153,8 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function getFreezeScores(Zone $zone): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -154,6 +168,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('s.score', 'DESC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -163,7 +179,8 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function getFormerWorldRecords(Zone $zone): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -176,6 +193,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('s.registration', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -185,7 +204,8 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function getBestScoreVideos(Zone $zone, int $limit = 10): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -201,6 +221,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -210,7 +232,8 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function getBestDamageVideos(Zone $zone, int $limit = 10): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -227,6 +250,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -242,6 +267,7 @@ class ScoreRepository extends ServiceEntityRepository
         ];
 
         // Best Live proof
+        /** @var Score|null $liveScore */
         $liveScore = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
@@ -265,6 +291,7 @@ class ScoreRepository extends ServiceEntityRepository
 
         // Best Non Glitch proof (if zone has glitch modes)
         if ($zone->isGlitch()) {
+            /** @var Score|null $nonGlitchScore */
             $nonGlitchScore = $this->createQueryBuilder('s')
                 ->leftJoin('s.player', 'p')
                 ->addSelect('p')
@@ -323,7 +350,8 @@ class ScoreRepository extends ServiceEntityRepository
             return [];
         }
 
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $result */
+        $result = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -337,6 +365,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('z.id', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -498,7 +528,8 @@ class ScoreRepository extends ServiceEntityRepository
             return [];
         }
 
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $scores */
+        $scores = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -512,6 +543,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('z.id', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $scores;
     }
 
     /**
@@ -546,7 +579,8 @@ class ScoreRepository extends ServiceEntityRepository
             return [];
         }
 
-        return $this->createQueryBuilder('s')
+        /** @var list<Score> $scores */
+        $scores = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
@@ -560,6 +594,8 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('z.id', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $scores;
     }
 
     /**
@@ -570,9 +606,12 @@ class ScoreRepository extends ServiceEntityRepository
      */
     public function findByFilters(array $filters): array
     {
-        return $this->findByFiltersQueryBuilder($filters)
+        /** @var list<Score> $result */
+        $result = $this->findByFiltersQueryBuilder($filters)
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**

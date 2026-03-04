@@ -25,6 +25,7 @@ class CarRepository extends ServiceEntityRepository
      */
     public function getCarList(): array
     {
+        /** @var Car[] $cars */
         $cars = $this->createQueryBuilder('c')
             ->orderBy('c.name', 'ASC')
             ->getQuery()
@@ -32,7 +33,7 @@ class CarRepository extends ServiceEntityRepository
 
         $carList = [];
         foreach ($cars as $car) {
-            $carList[$car->getId()] = $car->getName();
+            $carList[(int) $car->getId()] = $car->getName();
         }
 
         return $carList;

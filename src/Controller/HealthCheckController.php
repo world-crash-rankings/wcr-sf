@@ -463,7 +463,7 @@ class HealthCheckController extends AbstractController
             $content = file_get_contents($composerFile);
             if ($content !== false) {
                 $composer = json_decode($content, true);
-                if (isset($composer['version'])) {
+                if (is_array($composer) && isset($composer['version']) && is_string($composer['version'])) {
                     return $composer['version'];
                 }
             }

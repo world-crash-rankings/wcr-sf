@@ -28,7 +28,8 @@ class PlayerRepository extends ServiceEntityRepository
      */
     public function findByTotalRank(int $limit): array
     {
-        return $this->createQueryBuilder('p')
+        /** @var Player[] $result */
+        $result = $this->createQueryBuilder('p')
             ->leftJoin('p.country', 'c')
             ->addSelect('c')
             ->where('p.totalRank <= :limit')
@@ -36,6 +37,8 @@ class PlayerRepository extends ServiceEntityRepository
             ->orderBy('p.total', 'DESC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -43,7 +46,8 @@ class PlayerRepository extends ServiceEntityRepository
      */
     public function findByAvgPosRank(int $limit): array
     {
-        return $this->createQueryBuilder('p')
+        /** @var Player[] $result */
+        $result = $this->createQueryBuilder('p')
             ->leftJoin('p.country', 'c')
             ->addSelect('c')
             ->where('p.avgPosRank <= :limit')
@@ -51,6 +55,8 @@ class PlayerRepository extends ServiceEntityRepository
             ->orderBy('p.avgPos', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -58,7 +64,8 @@ class PlayerRepository extends ServiceEntityRepository
      */
     public function findByAvgStarsRank(int $limit): array
     {
-        return $this->createQueryBuilder('p')
+        /** @var Player[] $result */
+        $result = $this->createQueryBuilder('p')
             ->leftJoin('p.country', 'c')
             ->addSelect('c')
             ->where('p.avgStarsRank <= :limit')
@@ -66,6 +73,8 @@ class PlayerRepository extends ServiceEntityRepository
             ->orderBy('p.avgStars', 'DESC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -73,7 +82,8 @@ class PlayerRepository extends ServiceEntityRepository
      */
     public function findByAvgPercentRank(int $limit): array
     {
-        return $this->createQueryBuilder('p')
+        /** @var Player[] $result */
+        $result = $this->createQueryBuilder('p')
             ->leftJoin('p.country', 'c')
             ->addSelect('c')
             ->where('p.avgPercentRank <= :limit')
@@ -81,6 +91,8 @@ class PlayerRepository extends ServiceEntityRepository
             ->orderBy('p.avgPercent', 'DESC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -88,13 +100,16 @@ class PlayerRepository extends ServiceEntityRepository
      */
     public function findByCountryOrderedByRank(int $countryId): array
     {
-        return $this->createQueryBuilder('p')
+        /** @var Player[] $result */
+        $result = $this->createQueryBuilder('p')
             ->where('p.country = :countryId')
             ->andWhere('p.avgPosRank IS NOT NULL')
             ->setParameter('countryId', $countryId)
             ->orderBy('p.avgPosRank', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -104,12 +119,15 @@ class PlayerRepository extends ServiceEntityRepository
      */
     public function findAllOrderedByName(): array
     {
-        return $this->createQueryBuilder('p')
+        /** @var Player[] $result */
+        $result = $this->createQueryBuilder('p')
             ->leftJoin('p.country', 'c')
             ->addSelect('c')
             ->orderBy('p.name', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**
@@ -119,6 +137,7 @@ class PlayerRepository extends ServiceEntityRepository
      */
     public function getPlayerChoices(): array
     {
+        /** @var Player[] $players */
         $players = $this->createQueryBuilder('p')
             ->orderBy('p.name', 'ASC')
             ->getQuery()
@@ -150,7 +169,10 @@ class PlayerRepository extends ServiceEntityRepository
         ';
 
         $result = $conn->executeQuery($sql, ['playerId' => $playerId]);
-        return array_column($result->fetchAllAssociative(), 'platform');
+        /** @var string[] $platforms */
+        $platforms = array_column($result->fetchAllAssociative(), 'platform');
+
+        return $platforms;
     }
 
     /**
