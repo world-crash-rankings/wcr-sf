@@ -47,7 +47,7 @@
                     <table class="table table-striped table-hover mb-0">
                         <tbody>
                             {% for video in videos %}
-                                {{ macros.video_score_row(video.chartRank ?? '-', video, true) }}
+                                {{ macros.video_score_row(video.chartRank ?? '-', video, true, type == 'damage') }}
                             {% endfor %}
                         </tbody>
                     </table>
