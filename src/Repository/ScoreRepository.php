@@ -113,37 +113,61 @@ class ScoreRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get scores filtered by glitch type
+     * Get best score per player filtered by glitch type
      *
      * @return list<Score>
      */
     public function getUnSortedScores(Zone $zone, string $glitchType, int $limit = 10): array
     {
-        $qb = $this->createQueryBuilder('s')
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT s.id
+            FROM scores s
+            WHERE s.zone_id = :zoneId
+            AND s.glitch = :glitch
+            AND s.id = (
+                SELECT lookup.id
+                FROM scores lookup
+                WHERE lookup.player_id = s.player_id
+                AND lookup.zone_id = s.zone_id
+                AND lookup.glitch = :glitch
+                ORDER BY lookup.score DESC
+                LIMIT 1
+            )
+            ORDER BY s.score DESC
+            LIMIT :limit
+        ';
+
+        $result = $conn->executeQuery($sql, [
+            'zoneId' => $zone->getId(),
+            'glitch' => $glitchType,
+            'limit' => $limit,
+        ], [
+            'limit' => \Doctrine\DBAL\ParameterType::INTEGER,
+        ]);
+
+        $scoreIds = array_column($result->fetchAllAssociative(), 'id');
+
+        if (empty($scoreIds)) {
+            return [];
+        }
+
+        /** @var list<Score> $scores */
+        $scores = $this->createQueryBuilder('s')
             ->leftJoin('s.player', 'p')
             ->addSelect('p')
             ->leftJoin('p.country', 'country')
             ->addSelect('country')
             ->leftJoin('s.car', 'c')
             ->addSelect('c')
-            ->where('s.zone = :zone')
-            ->setParameter('zone', $zone);
+            ->where('s.id IN (:ids)')
+            ->setParameter('ids', $scoreIds)
+            ->orderBy('s.score', 'DESC')
+            ->getQuery()
+            ->getResult();
 
-        if ($glitchType === 'None') {
-            $qb->andWhere('s.glitch = :glitch')
-                ->setParameter('glitch', \App\Enum\GlitchType::NONE);
-        } elseif ($glitchType === 'Sink') {
-            $qb->andWhere('s.glitch = :glitch')
-                ->setParameter('glitch', \App\Enum\GlitchType::SINK);
-        }
-
-        $qb->orderBy('s.score', 'DESC')
-            ->setMaxResults($limit);
-
-        /** @var list<Score> $result */
-        $result = $qb->getQuery()->getResult();
-
-        return $result;
+        return $scores;
     }
 
     /**
