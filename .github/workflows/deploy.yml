@@ -1,4 +1,4 @@
-name: Deploy
+name: deploy
 
 on:
     push:
@@ -52,8 +52,8 @@ jobs:
 
             - name: Compile assets (production only)
               if: ${{ (inputs.environment || 'staging') == 'production' }}
+              env:
+                  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
               run: |
-                  eval $(ssh-agent -a /tmp/ssh_agent.sock)
-                  ssh-add ~/.ssh/id_ed25519
                   ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && php bin/console asset-map:compile"
 
