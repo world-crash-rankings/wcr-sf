@@ -20,13 +20,16 @@ class ZoneRepository extends ServiceEntityRepository
 
     public function findWithStars(int $id): ?Zone
     {
-        return $this->createQueryBuilder('z')
+        /** @var Zone|null $result */
+        $result = $this->createQueryBuilder('z')
             ->leftJoin('z.starThresholds', 's')
             ->addSelect('s')
             ->where('z.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
+
+        return $result;
     }
 
     /**

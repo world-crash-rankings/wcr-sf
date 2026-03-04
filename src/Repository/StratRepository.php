@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Score;
 use App\Entity\Strat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -26,6 +27,7 @@ class StratRepository extends ServiceEntityRepository
     public function findByZoneWithScores(\App\Entity\Zone $zone): array
     {
         // First, get all strats for the zone with cars
+        /** @var list<Strat> $strats */
         $strats = $this->createQueryBuilder('s')
             ->leftJoin('s.cars', 'c')
             ->addSelect('c')
@@ -37,9 +39,10 @@ class StratRepository extends ServiceEntityRepository
 
         // For each strat, load top 10 scores
         if (count($strats) > 0) {
-            $stratIds = array_map(fn($s) => $s->getId(), $strats);
+            $stratIds = array_map(fn(Strat $s) => $s->getId(), $strats);
 
             // Load scores for all strats at once
+            /** @var Score[] $scores */
             $scores = $this->getEntityManager()
                 ->createQuery(
                     'SELECT sc, p, car
@@ -55,7 +58,11 @@ class StratRepository extends ServiceEntityRepository
             // Group scores by strat and limit to top 10 per strat
             $scoresByStrat = [];
             foreach ($scores as $score) {
-                $stratId = $score->getStrat()->getId();
+                $strat = $score->getStrat();
+                if ($strat === null) {
+                    continue;
+                }
+                $stratId = $strat->getId();
                 if (!isset($scoresByStrat[$stratId])) {
                     $scoresByStrat[$stratId] = [];
                 }

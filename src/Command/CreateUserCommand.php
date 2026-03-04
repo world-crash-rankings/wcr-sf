@@ -44,6 +44,7 @@ class CreateUserCommand extends Command
             return $answer;
         });
         $email = $helper->ask($input, $output, $emailQuestion);
+        assert(is_string($email));
 
         // Ask for username
         $usernameQuestion = new Question('Username: ');
@@ -54,17 +55,19 @@ class CreateUserCommand extends Command
             return $answer;
         });
         $username = $helper->ask($input, $output, $usernameQuestion);
+        assert(is_string($username));
 
         // Ask for password
         $passwordQuestion = new Question('Password: ');
         $passwordQuestion->setHidden(true);
-        $passwordQuestion->setValidator(function ($answer) {
-            if (strlen($answer) < 6) {
+        $passwordQuestion->setValidator(function (mixed $answer): string {
+            if (!is_string($answer) || strlen($answer) < 6) {
                 throw new \RuntimeException('Password must be at least 6 characters');
             }
             return $answer;
         });
         $password = $helper->ask($input, $output, $passwordQuestion);
+        assert(is_string($password));
 
         // Ask if admin
         $isAdminQuestion = new ConfirmationQuestion('Is admin? (y/n) [n]: ', false);

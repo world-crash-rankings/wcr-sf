@@ -38,10 +38,13 @@ class CountryRepository extends ServiceEntityRepository
      */
     public function findAllOrderedByName(): array
     {
-        return $this->createQueryBuilder('c')
+        /** @var Country[] $result */
+        $result = $this->createQueryBuilder('c')
             ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     /**

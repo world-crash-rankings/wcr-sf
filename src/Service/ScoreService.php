@@ -302,6 +302,7 @@ class ScoreService
                 AND (s.glitch NOT IN (:nonRankable) OR s.glitch IS NULL)
                 ORDER BY s.score DESC';
 
+        /** @var list<Score> $result */
         $result = $this->entityManager->createQuery($dql)
             ->setParameter('player', $player)
             ->setParameter('zone', $zone)
@@ -397,6 +398,7 @@ class ScoreService
                 AND s.chartRank < 26
                 AND s.chartRank IS NOT NULL';
 
+        /** @var array{0: mixed, 1: int|string|null, 2: int|string|null} $result */
         $result = $this->entityManager->createQuery($dql)
             ->setParameter('player', $player)
             ->getSingleResult();
