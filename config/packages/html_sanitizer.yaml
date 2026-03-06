@@ -1,0 +1,26 @@
+framework:
+    html_sanitizer:
+        sanitizers:
+            app.rich_text_sanitizer:
+                allow_safe_elements: false
+                allow_relative_links: false
+                allow_relative_medias: false
+                allow_elements:
+                    p: ['class']
+                    br: []
+                    strong: []
+                    em: []
+                    u: []
+                    s: []
+                    ul: ['class']
+                    ol: ['class']
+                    li: []
+                    h2: ['class']
+                    h3: ['class']
+                    h4: ['class']
+                    a: ['href', 'title', 'target']
+                    blockquote: []
+                    code: []
+                    pre: []
+                    hr: []
+                    img: ['src', 'alt', 'width', 'height']
