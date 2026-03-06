@@ -38,12 +38,7 @@
         {# Google Analytics - Production only #}
         {% if app.environment == 'production' %}
             <script async src="https://www.googletagmanager.com/gtag/js?id=G-51WZV8QYVX"></script>
-            <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-51WZV8QYVX');
-            </script>
+            <script src="{{ asset('analytics.js') }}"></script>
         {% endif %}
 
         {% block stylesheets %}
@@ -180,16 +175,6 @@
             </div>
             <div class="push"></div>
         </div>
-
-        <script>
-            function initTooltips() {
-                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
-                    new bootstrap.Tooltip(el);
-                });
-            }
-            document.addEventListener('DOMContentLoaded', initTooltips);
-            document.addEventListener('turbo:load', initTooltips);
-        </script>
 
         <footer class="footer">
             <div class="container text-center">

@@ -10,7 +10,8 @@
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Add New Score</h5>
-            <form method="get" action="{{ path('admin_score_add', {id: 1}) }}" id="addScoreForm">
+            <form method="get" action="{{ path('admin_score_add', {id: 1}) }}" id="addScoreForm"
+                  data-add-score-base-url="{{ path('admin_score_list') }}/add/">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="addZoneSelect" class="form-label">Select Zone</label>
@@ -51,16 +52,6 @@
             {{ form_end(search_form) }}
         </div>
     </div>
-
-    <script>
-        document.getElementById('addScoreForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const zoneId = document.getElementById('addZoneSelect').value;
-            if (zoneId) {
-                window.location.href = '{{ path('admin_score_list') }}/add/' + zoneId;
-            }
-        });
-    </script>
 
     {% if searched %}
         <div class="mb-3">

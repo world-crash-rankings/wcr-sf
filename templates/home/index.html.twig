@@ -63,7 +63,7 @@
                 <h4 class="mb-0">{{ new.registration|date('F j, Y - H:i:s') }}</h4>
             </div>
             <article class="card-body rich-content">
-                {{ new.content|raw }}
+                {{ new.content|sanitize_html }}
             </article>
         </section>
     {% endfor %}
