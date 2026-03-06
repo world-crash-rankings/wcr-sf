@@ -34,8 +34,6 @@ class HealthCheckController extends AbstractController
         return $this->json([
             'status' => 'ok',
             'timestamp' => time(),
-            'environment' => $this->getParameter('kernel.environment'),
-            'version' => $this->getAppVersion()
         ]);
     }
 
@@ -111,10 +109,7 @@ class HealthCheckController extends AbstractController
         return $this->json([
             'status' => $overallStatus,
             'timestamp' => time(),
-            'environment' => $this->getParameter('kernel.environment'),
-            'version' => $this->getAppVersion(),
             'checks' => $checks,
-            'user' => $this->getUser()?->getUserIdentifier()
         ], $httpStatus);
     }
 
@@ -130,10 +125,9 @@ class HealthCheckController extends AbstractController
                 'memory' => $this->getDetailedMemoryInfo(),
                 'disk' => $this->getDetailedDiskInfo(),
                 'php' => $this->getPhpInfo(),
-                'system' => $this->getSystemInfo()
+                'system' => $this->getSystemInfo(),
             ],
             'timestamp' => time(),
-            'user' => $this->getUser()?->getUserIdentifier()
         ]);
     }
 
@@ -153,23 +147,14 @@ class HealthCheckController extends AbstractController
                 throw new \Exception('Database query returned unexpected result');
             }
 
-            // Check connection pool status
-            $params = $connection->getParams();
-
             return [
                 'status' => 'healthy',
                 'message' => 'Database connection successful',
-                'details' => [
-                    'driver' => $params['driver'] ?? 'unknown',
-                    'host' => $params['host'] ?? 'unknown',
-                    'database' => $params['dbname'] ?? 'unknown'
-                ]
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'error',
                 'message' => 'Database connection failed',
-                'error' => $e->getMessage()
             ];
         }
     }
@@ -207,15 +192,11 @@ class HealthCheckController extends AbstractController
             return [
                 'status' => 'healthy',
                 'message' => 'Cache system operational',
-                'details' => [
-                    'adapter' => get_class($this->cache)
-                ]
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'error',
                 'message' => 'Cache system failed',
-                'error' => $e->getMessage()
             ];
         }
     }
@@ -257,14 +238,12 @@ class HealthCheckController extends AbstractController
                     'used_percentage' => round($usedPercentage, 2),
                     'free_space' => $this->formatBytes($freeBytes),
                     'total_space' => $this->formatBytes($totalBytes),
-                    'path' => $varPath
-                ]
+                ],
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'error',
                 'message' => 'Disk space check failed',
-                'error' => $e->getMessage()
             ];
         }
     }
@@ -300,16 +279,11 @@ class HealthCheckController extends AbstractController
             return [
                 'status' => 'healthy',
                 'message' => 'Log directory writable',
-                'details' => [
-                    'path' => $logDir,
-                    'permissions' => substr(sprintf('%o', fileperms($logDir)), -4)
-                ]
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'error',
                 'message' => 'Log directory check failed',
-                'error' => $e->getMessage()
             ];
         }
     }
@@ -376,7 +350,6 @@ class HealthCheckController extends AbstractController
         return [
             'free' => disk_free_space($path),
             'total' => disk_total_space($path),
-            'path' => $path
         ];
     }
 
@@ -386,15 +359,7 @@ class HealthCheckController extends AbstractController
     private function getPhpInfo(): array
     {
         return [
-            'version' => PHP_VERSION,
-            'sapi' => PHP_SAPI,
-            'extensions' => get_loaded_extensions(),
-            'ini' => [
-                'memory_limit' => ini_get('memory_limit'),
-                'max_execution_time' => ini_get('max_execution_time'),
-                'post_max_size' => ini_get('post_max_size'),
-                'upload_max_filesize' => ini_get('upload_max_filesize')
-            ]
+            'version' => PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION,
         ];
     }
 
@@ -404,9 +369,7 @@ class HealthCheckController extends AbstractController
     private function getSystemInfo(): array
     {
         return [
-            'os' => PHP_OS,
-            'hostname' => gethostname(),
-            'load_average' => function_exists('sys_getloadavg') ? sys_getloadavg() : null
+            'os_family' => PHP_OS_FAMILY,
         ];
     }
 
@@ -451,33 +414,6 @@ class HealthCheckController extends AbstractController
         $bytes /= (1 << (10 * (int) $pow));
 
         return round($bytes, 2) . ' ' . $units[(int) $pow];
-    }
-
-    private function getAppVersion(): string
-    {
-        $projectDir = $this->getStringParameter('kernel.project_dir');
-
-        // Try to get version from composer.json
-        $composerFile = $projectDir . '/composer.json';
-        if (file_exists($composerFile)) {
-            $content = file_get_contents($composerFile);
-            if ($content !== false) {
-                $composer = json_decode($content, true);
-                if (is_array($composer) && isset($composer['version']) && is_string($composer['version'])) {
-                    return $composer['version'];
-                }
-            }
-        }
-
-        // Try to get version from git
-        if (is_dir($projectDir . '/.git')) {
-            $version = exec('git describe --tags --always 2>/dev/null');
-            if ($version) {
-                return $version;
-            }
-        }
-
-        return 'unknown';
     }
 
     /**
