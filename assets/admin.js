@@ -1,5 +1,3 @@
-import './styles/admin.css';
-
 function initQuillEditors() {
     document.querySelectorAll('textarea.rich-text-editor:not(.quill-initialized)').forEach(function (textarea) {
         textarea.classList.add('quill-initialized');
@@ -42,28 +40,12 @@ function initQuillEditors() {
     });
 }
 
-function initScoreForm() {
-    const form = document.getElementById('addScoreForm');
-    if (!form) {
-        return;
-    }
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const zoneId = document.getElementById('addZoneSelect').value;
-        if (zoneId) {
-            window.location.href = form.dataset.addScoreBaseUrl + zoneId;
-        }
-    });
-}
-
 window.addEventListener('load', function () {
     initQuillEditors();
-    initScoreForm();
 });
 
 document.addEventListener('turbo:load', function () {
     initQuillEditors();
-    initScoreForm();
 });
 
 document.addEventListener('turbo:render', function () {

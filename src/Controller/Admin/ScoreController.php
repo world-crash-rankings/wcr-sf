@@ -81,14 +81,14 @@ class ScoreController extends AbstractController
         ]);
     }
 
-    #[Route('/add/{id}', name: 'admin_score_add', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/add/', name: 'admin_score_add', methods: ['GET', 'POST'])]
     public function add(
         Request $request,
-        int $id,
         ZoneRepository $zoneRepository,
         EntityManagerInterface $entityManager
     ): Response {
-        $zone = $zoneRepository->find($id);
+        $zoneId = $request->query->getInt('zone_id');
+        $zone = $zoneRepository->find($zoneId);
 
         if (!$zone) {
             $this->addFlash('error', 'Zone not found.');
