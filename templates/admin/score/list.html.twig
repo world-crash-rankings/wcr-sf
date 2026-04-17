@@ -10,12 +10,11 @@
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Add New Score</h5>
-            <form method="get" action="{{ path('admin_score_add', {id: 1}) }}" id="addScoreForm"
-                  data-add-score-base-url="{{ path('admin_score_list') }}/add/">
+            <form method="get" action="{{ path('admin_score_list') }}/add/">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="addZoneSelect" class="form-label">Select Zone</label>
-                        <select class="form-select" id="addZoneSelect" name="zone_id" required>
+                        <select class="form-select" name="zone_id" required>
                             <option value="">Select a zone to add a score...</option>
                             {% for zone in zones %}
                                 <option value="{{ zone.id }}">{{ zone.id }} - {{ zone.name }}</option>
