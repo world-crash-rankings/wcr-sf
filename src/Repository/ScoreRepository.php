@@ -32,7 +32,6 @@ class ScoreRepository extends ServiceEntityRepository
             ->leftJoin('s.car', 'c')
             ->addSelect('c')
             ->where('s.player = :player')
-            ->andWhere('s.prEntry = true')
             ->andWhere('s.chartRank IS NOT NULL')
             ->setParameter('player', $player)
             ->orderBy('z.id', 'ASC')

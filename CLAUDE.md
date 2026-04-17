@@ -50,6 +50,19 @@ make cache-clear   # Clear Symfony cache
 make cache-warmup  # Warm up cache
 ```
 
+### Data Management
+```bash
+# Fix missing chart_rank for PR entries (use with caution - may create duplicates)
+php bin/console app:fix-pr-ranks                # Fix missing chart_rank for all personal record entries
+php bin/console app:fix-pr-ranks --zone=16      # Fix missing chart_rank for specific zone only
+php bin/console app:fix-pr-ranks --dry-run      # Show what would be fixed without making changes
+
+# Recalculate ranks properly (recommended - only one rank per player per zone)
+php bin/console app:recalculate-ranks           # Recalculate all zone rankings (best score per player)
+php bin/console app:recalculate-ranks --zone=16 # Recalculate specific zone only
+php bin/console app:recalculate-ranks --dry-run # Preview changes without applying
+```
+
 Run `make` or `make help` to see all available commands.
 
 ## Architecture

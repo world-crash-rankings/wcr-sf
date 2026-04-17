@@ -63,11 +63,13 @@ class StratRepository extends ServiceEntityRepository
                     continue;
                 }
                 $stratId = $strat->getId();
-                if (!isset($scoresByStrat[$stratId])) {
-                    $scoresByStrat[$stratId] = [];
-                }
-                if (count($scoresByStrat[$stratId]) < 10) {
-                    $scoresByStrat[$stratId][] = $score;
+                if ($stratId !== null) {
+                    if (!isset($scoresByStrat[$stratId])) {
+                        $scoresByStrat[$stratId] = [];
+                    }
+                    if (count($scoresByStrat[$stratId]) < 10) {
+                        $scoresByStrat[$stratId][] = $score;
+                    }
                 }
             }
         }

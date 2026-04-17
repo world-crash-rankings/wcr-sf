@@ -27,3 +27,4 @@
 /.phpcs-cache
 ###< PHP Code Sniffer ###
 
+/node_modules/
