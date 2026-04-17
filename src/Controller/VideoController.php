@@ -75,13 +75,15 @@ class VideoController extends AbstractController
 
             // Count by player
             $playerId = $video->getPlayer()->getId();
-            if (!isset($playerCounts[$playerId])) {
-                $playerCounts[$playerId] = [
-                    'player' => $video->getPlayer(),
-                    'count' => 0,
-                ];
+            if ($playerId !== null) {
+                if (!isset($playerCounts[$playerId])) {
+                    $playerCounts[$playerId] = [
+                        'player' => $video->getPlayer(),
+                        'count' => 0,
+                    ];
+                }
+                $playerCounts[$playerId]['count']++;
             }
-            $playerCounts[$playerId]['count']++;
 
             // Count by platform
             if ($video->getPlatform()) {
