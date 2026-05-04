@@ -41,14 +41,14 @@
             </td>
 
             {# Platform icon - Hidden on mobile #}
-            <td class="text-center d-none d-lg-table-cell" style="width: 50px;">
+            <td class="text-center" style="width: 50px;">
                 {% if wr.platform %}
                     <img src="{{ asset('img/logos/' ~ wr.platform.value|lower ~ '.png') }}" alt="{{ wr.platform.value }}" title="{{ wr.platform.value }}" width="32" height="32">
                 {% endif %}
             </td>
 
             {# Frequency/Version image - Hidden on mobile #}
-            <td class="text-center d-none d-lg-table-cell" style="width: 60px;">
+            <td class="text-center" style="width: 60px;">
                 {% if wr.freq and wr.version %}
                     <img src="{{ asset('img/logos/' ~ wr.freq.value|lower ~ '_' ~ wr.version.value|lower ~ '.png') }}" alt="{{ wr.freq.value }} {{ wr.version.value }}" width="32" height="32">
                 {% elseif wr.freq %}
