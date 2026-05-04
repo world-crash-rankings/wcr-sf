@@ -42,14 +42,14 @@
                 </td>
 
                 {# Platform icon - hidden on mobile #}
-                <td class="text-center d-none d-lg-table-cell" style="width: 50px;">
+                <td class="text-center" style="width: 50px;">
                     {% if score.platform %}
                         <img src="{{ asset('img/logos/' ~ score.platform.value|lower ~ '.png') }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="32" height="32">
                     {% endif %}
                 </td>
 
                 {# Frequency/Version image - hidden on mobile #}
-                <td class="text-center d-none d-lg-table-cell" style="width: 60px;">
+                <td class="text-center" style="width: 60px;">
                     {% if score.freq and score.version %}
                         <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
                     {% elseif score.freq %}
@@ -114,14 +114,14 @@
                 </td>
 
                 {# Platform icon - hidden on mobile #}
-                <td class="text-center d-none d-lg-table-cell" style="width: 50px;">
+                <td class="text-center" style="width: 50px;">
                     {% if score.platform %}
                         <img src="{{ asset('img/logos/' ~ score.platform.value|lower ~ '.png') }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="32" height="32">
                     {% endif %}
                 </td>
 
                 {# Frequency/Version image - hidden on mobile #}
-                <td class="text-center d-none d-lg-table-cell" style="width: 60px;">
+                <td class="text-center" style="width: 60px;">
                     {% if score.freq and score.version %}
                         <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
                     {% elseif score.freq %}
@@ -185,14 +185,14 @@
                 </td>
 
                 {# Platform icon - hidden on mobile #}
-                <td class="text-center d-none d-lg-table-cell" style="width: 50px;">
+                <td class="text-center" style="width: 50px;">
                     {% if score.platform %}
                         <img src="{{ asset('img/logos/' ~ score.platform.value|lower ~ '.png') }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="32" height="32">
                     {% endif %}
                 </td>
 
                 {# Frequency/Version image - hidden on mobile #}
-                <td class="text-center d-none d-lg-table-cell" style="width: 60px;">
+                <td class="text-center" style="width: 60px;">
                     {% if score.freq and score.version %}
                         <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
                     {% elseif score.freq %}

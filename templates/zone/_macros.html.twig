@@ -46,7 +46,7 @@
     </td>
 
     {# Platform icon - Hidden on mobile #}
-    <td class="text-center d-none d-lg-table-cell">
+    <td class="text-center">
         {% if score.platform %}
             {% set platformImg = score.platform.value|lower ~ (score.emulator ? '_emulator' : '') ~ '.png' %}
             <img src="{{ asset('img/logos/' ~ platformImg) }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
@@ -54,7 +54,7 @@
     </td>
 
     {# Frequency/Version image - Hidden on mobile #}
-    <td class="text-center d-none d-lg-table-cell">
+    <td class="text-center">
         {% if score.freq and score.version %}
             {# Both freq and version: 60hz_ntsc.png #}
             <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
@@ -144,7 +144,7 @@
     </td>
 
     {# Platform icon - Hidden on mobile #}
-    <td class="text-center d-none d-lg-table-cell">
+    <td class="text-center">
         {% if score.platform %}
             {% set platformImg = score.platform.value|lower ~ (score.emulator ? '_emulator' : '') ~ '.png' %}
             <img src="{{ asset('img/logos/' ~ platformImg) }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
@@ -152,7 +152,7 @@
     </td>
 
     {# Frequency/Version image - Hidden on mobile #}
-    <td class="text-center d-none d-lg-table-cell">
+    <td class="text-center">
         {% if score.freq and score.version %}
             {# Both freq and version: 60hz_ntsc.png #}
             <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
@@ -259,7 +259,7 @@
     </td>
 
     {# Platform icon - Hidden on mobile #}
-    <td class="text-center d-none d-lg-table-cell">
+    <td class="text-center">
         {% if score.platform %}
             {% set platformImg = score.platform.value|lower ~ (score.emulator ? '_emulator' : '') ~ '.png' %}
             <img src="{{ asset('img/logos/' ~ platformImg) }}" alt="{{ score.platform.value }}" title="{{ score.platform.value }}" width="24" height="24">
@@ -267,7 +267,7 @@
     </td>
 
     {# Frequency/Version image - Hidden on mobile #}
-    <td class="text-center d-none d-lg-table-cell">
+    <td class="text-center">
         {% if score.freq and score.version %}
             {# Both freq and version: 60hz_ntsc.png #}
             <img src="{{ asset('img/logos/' ~ score.freq.value|lower ~ '_' ~ score.version.value|lower ~ '.png') }}" alt="{{ score.freq.value }} {{ score.version.value }}" width="32" height="32">
