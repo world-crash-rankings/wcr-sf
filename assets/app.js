@@ -1,5 +1,4 @@
 import './stimulus_bootstrap.js';
-import './styles/app.css';
 
 function initTooltips() {
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
