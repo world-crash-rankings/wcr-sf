@@ -62,7 +62,7 @@
             <td class="text-center" style="width: 50px;">
                 {% if wr.proofType %}
                     {% if wr.proofLink %}
-                        <a href="{{ wr.proofLink }}" target="_blank">
+                        <a href="{{ wr.proofLink }}" target="_blank" data-umami-event="proof-link-click" data-umami-event-type="{{ wr.proofType.value }}">
                             <img src="{{ asset('img/proofs/' ~ wr.proofType.value|lower ~ '.png') }}" alt="{{ wr.proofType.value }}" title="{{ wr.proofType.value }}" width="20" height="20" class="d-sm-none">
                             <img src="{{ asset('img/proofs/' ~ wr.proofType.value|lower ~ '.png') }}" alt="{{ wr.proofType.value }}" title="{{ wr.proofType.value }}" width="32" height="32" class="d-none d-sm-inline">
                         </a>

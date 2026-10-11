@@ -44,6 +44,7 @@ class PlayerComparisonType extends AbstractType
                 'label' => 'Crash Clash!',
                 'attr' => [
                     'class' => 'btn btn-primary',
+                    'data-umami-event' => 'player-comparison-submit',
                 ],
             ]);
     }

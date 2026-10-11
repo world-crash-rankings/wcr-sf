@@ -148,13 +148,6 @@ Central service handling all ranking calculations. When a score is added, update
 ### Notifications
 - Discord notifications sent on new scores via Symfony Notifier (ScoreDiscordSubscriber)
 
-## Git Workflow
-
-- **NEVER create git commits** - The user handles all commits themselves
-- **NEVER run `git add`, `git commit`, or `git push` commands**
-- Only run `git status` or `git diff` for informational purposes when explicitly requested
-- If the user asks to "commit changes", only explain what files were modified and let them commit
-
 ## Important Notes
 
 - **Language**: The website is entirely in English - all content, messages, and UI text must be in English only

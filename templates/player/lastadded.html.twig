@@ -89,7 +89,7 @@
                                     <td class="text-center" style="width: 50px;">
                                         {% if score.proofType %}
                                             {% if score.proofLink %}
-                                                <a href="{{ score.proofLink }}" target="_blank">
+                                                <a href="{{ score.proofLink }}" target="_blank" data-umami-event="proof-link-click" data-umami-event-type="{{ score.proofType.value }}">
                                                     <img src="{{ asset('img/proofs/' ~ score.proofType.value|lower ~ '.png') }}"
                                                          alt="{{ score.proofType.value }}"
                                                          title="{{ score.proofType.value }}"

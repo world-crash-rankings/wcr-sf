@@ -28,3 +28,5 @@
 ###< PHP Code Sniffer ###
 
 /node_modules/
+
+/.claude/feature-status/
